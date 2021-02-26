@@ -1,11 +1,16 @@
+import React, { Component } from 'react';
 import './app.css';
 
-import Cell from './components/cell/cell.js'
+import Canvas from './components/canvas/canvas.js';
 
-const App = () => {
-  return (
-    <Cell />
-  );
+class App extends Component {
+  render() {
+    return (
+      <div id="app">
+        <Canvas />
+      </div>
+    );
+  }
 };
 
 export default App;
