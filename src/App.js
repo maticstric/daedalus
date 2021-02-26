@@ -1,8 +1,10 @@
 import './app.css';
 
+import Cell from './components/cell/cell.js'
+
 const App = () => {
   return (
-    <p>imma app</p>
+    <Cell />
   );
 };
 
