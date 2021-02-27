@@ -4,6 +4,8 @@ import './canvas.css';
 import Board from '../../classes/board.js';
 
 //const CANVAS_SCALE = 0.4;
+const ROWS = 5;
+const COLS = 5;
 
 class Canvas extends Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class Canvas extends Component {
     ctx.canvas.width = this.width;
     ctx.canvas.height = this.height;
 
-    let board = new Board(this.width, this.height, 11, 11, ctx);
+    let board = new Board(this.width, this.height, (ROWS * 2) + 1, (COLS * 2) + 1, ctx);
     board.show();
   }
 

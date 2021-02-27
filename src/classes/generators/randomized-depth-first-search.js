@@ -8,7 +8,9 @@ class RandomizedDepthFirstSearch extends Generator {
   }
 
   generate() {
-    this.recursiveGenerate(this.cells[20]);
+    let startingCell = this.cells[this.board.cols + 1];
+
+    this.recursiveGenerate(startingCell);
   }
 
   recursiveGenerate(cell) {

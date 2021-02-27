@@ -1,3 +1,5 @@
+import Colors from '../colors.js';
+
 class Cell {
   constructor(x, y, row, col, width, height, isWall, ctx) {
     this.x = x;
@@ -12,9 +14,9 @@ class Cell {
 
   show() {
     if (this.isWall) {
-      this.ctx.fillStyle = "#000000";
+      this.ctx.fillStyle = Colors.black;
     } else {
-      this.ctx.fillStyle = "#FFFFFF";
+      this.ctx.fillStyle = Colors.white;
     }
 
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
