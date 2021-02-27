@@ -3,6 +3,7 @@ import './app.css';
 
 import Canvas from './components/canvas/canvas.js';
 import Controls from './components/controls/controls.js';
+import Selector from './components/selector/selector.js';
 
 class App extends Component {
   render() {
@@ -10,6 +11,7 @@ class App extends Component {
       <div id="app">
         <Controls />
         <Canvas />
+        <Selector />
       </div>
     );
   }

@@ -29,7 +29,7 @@ class Canvas extends Component {
 
   render() {
     return (
-      <div id="wrapper">
+      <div id="canvas-wrapper">
         <canvas id="canvas" ref={this.canvasRef} width={550} height={550} />
       </div>
     );
