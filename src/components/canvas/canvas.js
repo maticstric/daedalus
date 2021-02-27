@@ -10,8 +10,8 @@ class Canvas extends Component {
     super(props);
 
     this.canvasRef = createRef();
-    this.width = 500;//Math.floor(window.innerWidth * CANVAS_SCALE);
-    this.height = 500;//Math.floor(window.innerWidth * CANVAS_SCALE);
+    this.width = 550;//Math.floor(window.innerWidth * CANVAS_SCALE);
+    this.height = 550;//Math.floor(window.innerWidth * CANVAS_SCALE);
   }
 
   componentDidMount() {
@@ -21,14 +21,14 @@ class Canvas extends Component {
     ctx.canvas.width = this.width;
     ctx.canvas.height = this.height;
 
-    let board = new Board(this.width, this.height, 10, 10, ctx);
+    let board = new Board(this.width, this.height, 11, 11, ctx);
     board.show();
   }
 
   render() {
     return (
       <div id="wrapper">
-        <canvas id="canvas" ref={this.canvasRef} width={500} height={500} />
+        <canvas id="canvas" ref={this.canvasRef} width={550} height={550} />
       </div>
     );
   }
