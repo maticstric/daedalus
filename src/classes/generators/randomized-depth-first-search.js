@@ -1,51 +1,54 @@
 import Generator from './generator.js';
 
 class RandomizedDepthFirstSearch extends Generator {
-  constructor(board) {
-    super(board);
+  async generate() {
+    let stack = [];
 
-    console.log('rdfs');
-  }
+    let startingCell = this.cells[this.board.cols + 1]
+    startingCell.isWall = false;
+    startingCell.isVisited = true;
+    stack.push(startingCell);
 
-  generate() {
-    let startingCell = this.cells[this.board.cols + 1];
+    while (stack.length !== 0) {
+      let currentCell = stack.pop();
 
-    this.recursiveGenerate(startingCell);
-  }
+      let unvisitedNeighbors = this.unvisitedNeighbors(currentCell);
 
-  recursiveGenerate(cell) {
-    cell.isWall = false; 
+      if (unvisitedNeighbors.length !== 0) {
+        stack.push(currentCell);
 
-    let neighbors = this.board.neumannNeighborhood(cell);
-    let walls = this.neighborWalls(neighbors);
+        let randomIndex = Math.floor(Math.random() * unvisitedNeighbors.length);
+        let randomNeighbor = unvisitedNeighbors[randomIndex];
 
-    while (walls.length > 0) {
-      let randomIndex = Math.floor(Math.random() * walls.length);
-      let randomNeighbor = walls[randomIndex];
+        this.board.cellBetween(currentCell, randomNeighbor).isWall = false;
 
-      // Delete wall between the two cells
-      let cellBetween = this.board.cellBetween(cell, randomNeighbor);
-      cellBetween.isWall = false;
+        randomNeighbor.isVisited = true;
+        randomNeighbor.isWall = false;
+        stack.push(randomNeighbor);
 
-      // Call recursively
-      this.recursiveGenerate(randomNeighbor);
+        this.board.show();
 
-      // Update the neighbor walls
-      walls = this.neighborWalls(neighbors);
+        if (this.speed < 1) {
+          await new Promise(resolve => setTimeout(resolve, (1 - this.speed) * 1000));
+        }
+      }
     }
   }
 
-  neighborWalls(neighbors) { // Returns neighbors which are walls (haven't been visited)
-    let walls = [];
+  delay = ms => new Promise(res => setTimeout(res, ms));
+
+  unvisitedNeighbors(cell) { // Returns neighbors which haven't been visited
+    let neighbors = this.board.neumannNeighborhood(cell);
+    let unvisitedNeighbors = [];
 
     for (let i = 0; i < neighbors.length; i++) {
-      let cell = neighbors[i];
-      if(cell.isWall) {
-        walls.push(cell);
+      let c = neighbors[i];
+      if(!c.isVisited) {
+        unvisitedNeighbors.push(c);
       }
     }
 
-    return walls;
+    return unvisitedNeighbors;
   }
 }
 

@@ -1,7 +1,8 @@
 class Generator {
-  constructor(board) {
+  constructor(board, speed) {
     this.board = board;
     this.cells = board.cells;
+    this.speed = speed;
   }
 }
 

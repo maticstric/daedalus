@@ -1,5 +1,4 @@
 import Cell from './cell.js';
-import RandomizedDepthFirstSearch from './generators/randomized-depth-first-search.js';
 
 class Board {
   constructor(width, height, rows, cols, ctx) {
@@ -10,9 +9,6 @@ class Board {
     this.ctx = ctx;
 
     this.cells = this.initCells();
-
-    let rdfs = new RandomizedDepthFirstSearch(this);
-    rdfs.generate();
   }
 
   initCells() {
@@ -25,7 +21,7 @@ class Board {
         let x = width * j;
         let y = height * i;
 
-        cells.push(new Cell(x, y, i, j, width, height, true, this.ctx));
+        cells.push(new Cell(x, y, i, j, width, height, true, false, this.ctx));
       }
     }
 

@@ -1,7 +1,7 @@
 import Colors from '../colors.js';
 
 class Cell {
-  constructor(x, y, row, col, width, height, isWall, ctx) {
+  constructor(x, y, row, col, width, height, isWall, isVisited, ctx) {
     this.x = x;
     this.y = y;
     this.row = row;
@@ -9,6 +9,7 @@ class Cell {
     this.width = width;
     this.height = height;
     this.isWall = isWall;
+    this.isVisited = isVisited;
     this.ctx = ctx;
   }
 
