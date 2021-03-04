@@ -10,6 +10,10 @@ class RandomizedDepthFirstSearch extends Generator {
     stack.push(startingCell);
 
     while (stack.length !== 0) {
+      while (this.paused) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+
       let currentCell = stack.pop();
 
       let unvisitedNeighbors = this.unvisitedNeighbors(currentCell);
