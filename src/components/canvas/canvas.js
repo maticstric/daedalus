@@ -5,8 +5,8 @@ import Board from '../../classes/board.js';
 import RandomizedDepthFirstSearch from '../../classes/generators/randomized-depth-first-search.js';
 
 //const CANVAS_SCALE = 0.4;
-const ROWS = 20;
-const COLS = 20;
+const ROWS = 5;
+const COLS = 5;
 
 class Canvas extends Component {
   constructor(props) {
@@ -30,14 +30,15 @@ class Canvas extends Component {
     this.board = new Board(this.width, this.height, (ROWS * 2) + 1, (COLS * 2) + 1, ctx);
     this.board.show();
 
-    this.generator = new RandomizedDepthFirstSearch(this.board, this.props.speedValue);
-		this.generator.generate();
+    this.generator = new RandomizedDepthFirstSearch(this.board, this.props.speedValue, this.props.paused);
+    this.generator.generate();
   }
 
   render() {
-		if (this.generator) {
-			this.generator.speed = this.props.speedValue;
-		}
+    if (this.generator) {
+      this.generator.speed = this.props.speedValue;
+      this.generator.paused = this.props.paused;
+    }
 
     return (
       <div id="canvas-wrapper">
