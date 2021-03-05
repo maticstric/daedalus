@@ -8,11 +8,10 @@ class PlayPauseButton extends Component {
   render() {
     let button;
 
-    console.log(this.props.paused);
-    if (this.props.paused) {
-      button = <PlayButton onClick={this.props.onClick} />
+    if (this.props.isPaused) {
+      button = <PlayButton updateIsPaused={this.props.updateIsPaused} />
     } else {
-      button = <PauseButton onClick={this.props.onClick} />
+      button = <PauseButton updateIsPaused={this.props.updateIsPaused} />
     }
 
     return (
@@ -25,13 +24,13 @@ class PlayPauseButton extends Component {
 
 function PauseButton(props) {
   return (
-    <img onClick={props.onClick} alt="pause" src={PauseSvg} />
+    <img onClick={() => props.updateIsPaused(true)} alt="pause" src={PauseSvg} />
   );
 }
 
 function PlayButton(props) {
   return (
-    <img onClick={props.onClick} alt="play" src={PlaySvg} />
+    <img onClick={() => props.updateIsPaused(false)} alt="play" src={PlaySvg} />
   );
 }
 

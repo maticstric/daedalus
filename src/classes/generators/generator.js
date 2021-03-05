@@ -1,9 +1,9 @@
 class Generator {
-  constructor(board, speed, paused) {
+  constructor(board, speed, isPaused) {
     this.board = board;
     this.cells = board.cells;
     this.speed = speed;
-    this.paused = paused;
+    this.isPaused = isPaused;
   }
 }
 

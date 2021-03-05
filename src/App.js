@@ -9,12 +9,12 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.updateSpeed = this.updateSpeed.bind(this);
-    this.updatePause = this.updatePause.bind(this);
+    this.updateGenerationSpeed = this.updateGenerationSpeed.bind(this);
+    this.updateIsPaused = this.updateIsPaused.bind(this);
 
     this.state = {
-      speedValue: 0,
-      paused: false,
+      generationSpeed: 0,
+      isPaused: false
     };
   }
 
@@ -22,33 +22,29 @@ class App extends Component {
     return (
       <div id="app">
         <Controls
-          onChange={this.updateSpeed}
-          onClick={this.updatePause}
-          paused={this.state.paused}
+          updateGenerationSpeed={this.updateGenerationSpeed}
+          updateIsPaused={this.updateIsPaused}
+          isPaused={this.state.isPaused}
         />
         <Canvas
-          speedValue={this.state.speedValue}
-          paused={this.state.paused}
+          generationSpeed={this.state.generationSpeed}
+          isPaused={this.state.isPaused}
         />
         <Selector />
       </div>
     );
   }
 
-  updateSpeed(event) {
-    this.setState({speedValue: event.target.value});
+  updateGenerationSpeed(event) {
+    this.setState({
+      generationSpeed: event.target.value
+    });
   }
 
-  updatePause() {
-    if (this.state.paused) {
-      this.setState({
-        paused: false,
-      });
-    } else {
-      this.setState({
-        paused: true,
-      });
-    }
+  updateIsPaused(isPaused) {
+    this.setState({
+      isPaused: isPaused
+    });
   }
 };
 

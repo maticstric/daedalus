@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import './controls.css';
 
-import Slider from '../../components/slider/slider.js';
+import GenerationSpeedSlider from '../../components/generation-speed-slider/generation-speed-slider.js';
 import PlayPauseButton from '../../components/play-pause-button/play-pause-button.js';
 
 class Controls extends Component {
   render() {
     return (
-      <div id='controls-wrapper'>
-        <p>imma control</p>
-        <Slider onChange={this.props.onChange} />
-        <PlayPauseButton onClick={this.props.onClick} paused={this.props.paused}/>
+      <div id="controls-wrapper">
+        <GenerationSpeedSlider updateGenerationSpeed={this.props.updateGenerationSpeed} />
+        <PlayPauseButton
+          updateIsPaused={this.props.updateIsPaused}
+          isPaused={this.props.isPaused}
+        />
       </div>
     );
   }

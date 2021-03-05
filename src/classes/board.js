@@ -51,7 +51,7 @@ class Board {
   }
 
   // TODO: Probably some smarter way of doing this
-  cellBetween(cellA, cellB) { 
+  cellBetween(cellA, cellB) {
     if (Math.abs(cellA.col - cellB.col) === 2) {
       let colBetween = (cellA.col + cellB.col) / 2;
       return this.cells[this.index(cellA.row, colBetween)];

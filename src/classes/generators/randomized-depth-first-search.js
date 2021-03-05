@@ -10,7 +10,7 @@ class RandomizedDepthFirstSearch extends Generator {
     stack.push(startingCell);
 
     while (stack.length !== 0) {
-      while (this.paused) {
+      while (this.isPaused) {
         await new Promise(resolve => setTimeout(resolve, 300));
       }
 
@@ -38,8 +38,6 @@ class RandomizedDepthFirstSearch extends Generator {
       }
     }
   }
-
-  delay = ms => new Promise(res => setTimeout(res, ms));
 
   unvisitedNeighbors(cell) { // Returns neighbors which haven't been visited
     let neighbors = this.board.neumannNeighborhood(cell);
