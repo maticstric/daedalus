@@ -21,16 +21,14 @@ const App = (props) => {
     stack: []
   }]);
 
-  function generateRandomizedDepthFirstSearch() {
+  function nextStep() {
     RandomizedDepthFirstSearch.nextStep(board, stack, history, setBoard, setStack, setHistory);
   }
 
-  console.log(board);
-
   return (
     <div id="app">
-      <Controls 
-        generateRandomizedDepthFirstSearch={generateRandomizedDepthFirstSearch}
+      <Controls
+        nextStep={nextStep}
         board={board}
         stack={stack}
         history={history}
