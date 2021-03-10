@@ -1,27 +1,16 @@
-import Colors from '../colors.js';
-
 class Cell {
-  constructor(x, y, row, col, width, height, isWall, isVisited, ctx) {
+  constructor(x, y, index, width, height, isWall, isVisited) {
     this.x = x;
     this.y = y;
-    this.row = row;
-    this.col = col;
+    this.index = index;
     this.width = width;
     this.height = height;
     this.isWall = isWall;
     this.isVisited = isVisited;
-    this.ctx = ctx;
   }
 
-  show() {
-    if (this.isWall) {
-      this.ctx.fillStyle = Colors.black;
-    } else {
-      this.ctx.fillStyle = Colors.white;
-    }
-
-    this.ctx.fillRect(this.x, this.y, this.width, this.height);
-    this.ctx.stroke();
+  clone() {
+    return new Cell(this.x, this.y, this.index, this.width, this.height, this.isWall, this.isVisited);
   }
 }
 

@@ -1,50 +1,44 @@
-import React, { Component, createRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './canvas.css';
 
-import Board from '../../classes/board.js';
-import RandomizedDepthFirstSearch from '../../classes/generators/randomized-depth-first-search.js';
+import Colors from '../../colors.js';
 
-const ROWS = 5;
-const COLS = 5;
+const Canvas = (props) => {
+  const canvasEl = useRef();
 
-class Canvas extends Component {
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    const canvas = canvasEl.current;
+    let ctx = canvas.getContext('2d');
 
-    this.canvasRef = createRef();
-    this.width = 550;
-    this.height = 550;
+    ctx.canvas.width = 550;
+    ctx.canvas.height = 550;
+  }, []);
 
-    this.generator = null;
-    this.board = null;
+  useEffect(() => {
+    const canvas = canvasEl.current;
+    let ctx = canvas.getContext('2d');
+
+    showBoard(ctx);
+  });
+
+  const showBoard = (ctx) => {
+    props.board.cells.forEach(cell => {
+      if (cell.isWall) {
+        ctx.fillStyle = Colors.black;
+      } else {
+        ctx.fillStyle = Colors.white;
+      }
+
+      ctx.fillRect(cell.x, cell.y, cell.width, cell.height);
+      ctx.stroke();
+    });
   }
 
-  componentDidMount() {
-    const canvas = this.canvasRef.current;
-    const ctx = canvas.getContext("2d")
-
-    ctx.canvas.width = this.width;
-    ctx.canvas.height = this.height;
-
-    this.board = new Board(this.width, this.height, (ROWS * 2) + 1, (COLS * 2) + 1, ctx);
-    this.board.show();
-
-    this.generator = new RandomizedDepthFirstSearch(this.board, this.props.generationSpeed, this.props.isPaused);
-    this.generator.generate();
-  }
-
-  render() {
-    if (this.generator) {
-      this.generator.speed = this.props.generationSpeed;
-      this.generator.isPaused = this.props.isPaused;
-    }
-
-    return (
-      <div id="canvas-wrapper">
-        <canvas id="canvas" ref={this.canvasRef} width={550} height={550} />
-      </div>
-    );
-  }
+  return (
+    <div id="canvas-wrapper">
+      <canvas id="canvas" ref={canvasEl} width={550} height={550} />
+    </div>
+  );
 };
 
 export default Canvas;

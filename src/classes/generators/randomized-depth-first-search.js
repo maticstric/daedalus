@@ -1,56 +1,45 @@
-import Generator from './generator.js';
+class RandomizedDepthFirstSearch {
+  static nextStep = (board, stack, history, setBoard, setStack, setHistory) => {
+    let newStack = stack.slice();
+    let newBoard = board.clone();
 
-class RandomizedDepthFirstSearch extends Generator {
-  async generate() {
-    let stack = [];
+    if (newStack.length === 0) {
+      let startingCell = board.cells[board.cols + 1]
+      newBoard.cells[startingCell.index].isWall = false;
+      newBoard.cells[startingCell.index].isVisited = true;
 
-    let startingCell = this.cells[this.board.cols + 1]
-    startingCell.isWall = false;
-    startingCell.isVisited = true;
-    stack.push(startingCell);
+      newStack.push(startingCell);
+    } else {
+      while (newStack.length !== 0) {
+        let currentCell = newStack.pop();
 
-    while (stack.length !== 0) {
-      while (this.isPaused) {
-        await new Promise(resolve => setTimeout(resolve, 300));
-      }
+        let unvisitedNeighbors = board.unvisitedNeighbors(currentCell);
 
-      let currentCell = stack.pop();
+        if (unvisitedNeighbors.length !== 0) {
+          newStack.push(currentCell);
 
-      let unvisitedNeighbors = this.unvisitedNeighbors(currentCell);
+          let randomIndex = Math.floor(Math.random() * unvisitedNeighbors.length);
+          let randomNeighbor = unvisitedNeighbors[randomIndex];
 
-      if (unvisitedNeighbors.length !== 0) {
-        stack.push(currentCell);
+          let cellBetween = board.cellBetween(currentCell, randomNeighbor);
+          newBoard.cells[cellBetween.index].isWall = false;
 
-        let randomIndex = Math.floor(Math.random() * unvisitedNeighbors.length);
-        let randomNeighbor = unvisitedNeighbors[randomIndex];
+          newBoard.cells[randomNeighbor.index].isWall = false;
+          newBoard.cells[randomNeighbor.index].isVisited = true;
+          newStack.push(randomNeighbor);
 
-        this.board.cellBetween(currentCell, randomNeighbor).isWall = false;
-
-        randomNeighbor.isVisited = true;
-        randomNeighbor.isWall = false;
-        stack.push(randomNeighbor);
-
-        this.board.show();
-
-        if (this.speed < 1) {
-          await new Promise(resolve => setTimeout(resolve, (1 - this.speed) * 1000));
+          break;
         }
       }
     }
-  }
 
-  unvisitedNeighbors(cell) { // Returns neighbors which haven't been visited
-    let neighbors = this.board.neumannNeighborhood(cell);
-    let unvisitedNeighbors = [];
+    setHistory(history.concat([{
+      board: newBoard,
+      stack: newStack
+    }]));
 
-    for (let i = 0; i < neighbors.length; i++) {
-      let c = neighbors[i];
-      if(!c.isVisited) {
-        unvisitedNeighbors.push(c);
-      }
-    }
-
-    return unvisitedNeighbors;
+    setBoard(newBoard);
+    setStack(newStack);
   }
 }
 
