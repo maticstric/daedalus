@@ -10,9 +10,9 @@ const Canvas = (props) => {
     const canvas = canvasEl.current;
     let ctx = canvas.getContext('2d');
 
-    ctx.canvas.width = 550;
-    ctx.canvas.height = 550;
-  }, []);
+    ctx.canvas.width = props.canvasWidth;
+    ctx.canvas.height = props.canvasHeight;
+  }, [props.canvasHeight, props.canvasWidth]);
 
   useEffect(() => {
     const canvas = canvasEl.current;

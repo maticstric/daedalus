@@ -11,25 +11,25 @@ const Controls = (props) => {
   const next = () => {
     let maxHistoryIndex = Math.floor(props.board.cols / 2) * Math.floor(props.board.rows / 2);
 
-    if (props.historyIndex === maxHistoryIndex - 1) {
+    if (props.historyIndex === maxHistoryIndex - 2) {
       setIsNextDisabled(true);
     }
 
     setIsPreviousDisabled(false);
 
     let lastBoard = props.history[props.history.length - 1].board;
-    let lastStack = props.history[props.history.length - 1].stack;
+    let lastGeneratorState = props.history[props.history.length - 1].generatorState;
 
     // If on last board in history, generate new
     if (JSON.stringify(lastBoard) === JSON.stringify(props.board) &&
-        JSON.stringify(lastStack) === JSON.stringify(props.stack)) {
+        JSON.stringify(lastGeneratorState) === JSON.stringify(props.generatorState)) {
       props.nextStep();
     } else { // ... if not, just keep going forward in history
       let nextBoard = props.history[props.historyIndex + 1].board;
-      let nextStack = props.history[props.historyIndex + 1].stack;
+      let nextGeneratorState = props.history[props.historyIndex + 1].generatorState;
 
       props.setBoard(nextBoard);
-      props.setStack(nextStack);
+      props.setGeneratorState(nextGeneratorState);
     }
 
     props.setHistoryIndex(props.historyIndex + 1);
@@ -43,10 +43,10 @@ const Controls = (props) => {
     setIsNextDisabled(false);
 
     let previousBoard = props.history[props.historyIndex - 1].board;
-    let previousStack = props.history[props.historyIndex - 1].stack;
+    let previousGeneratorState = props.history[props.historyIndex - 1].generatorState;
 
     props.setBoard(previousBoard);
-    props.setStack(previousStack);
+    props.setGeneratorState(previousGeneratorState);
 
     props.setHistoryIndex(props.historyIndex - 1);
   }

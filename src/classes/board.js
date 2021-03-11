@@ -30,9 +30,8 @@ class Board {
 
   neumannNeighborhood = (cell) => {
     let neighbors = [];
-    let row = Math.floor(cell.index / this.cols);
-    let col = cell.index % this.cols;
-
+    let {row, col} = this.getRowAndCol(cell);
+    
     let top = this.cells[this.index(row - 2, col)];
     let right = this.cells[this.index(row, col + 2)];
     let bottom = this.cells[this.index(row + 2, col)];
@@ -78,6 +77,13 @@ class Board {
     }
 
     return col + row * this.cols;
+  }
+  
+  getRowAndCol(cell) {
+    let row = Math.floor(cell.index / this.cols);
+    let col = cell.index % this.cols;
+
+    return {row: row, col: col};
   }
 
   clone = () => {
