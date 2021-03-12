@@ -23,21 +23,22 @@ const App = (props) => {
     generatorState: generatorState
   }]);
 
-  function nextStep() {
-    //RandomizedDepthFirstSearch.nextStep(board, generatorState, history, setBoard, setGeneratorState, setHistory);
-    RandomizedKruskalsAlgorithm.nextStep(board, generatorState, history, setBoard, setGeneratorState, setHistory);
+  function doSteps(numSteps, board, generatorState, history, setBoard, setGeneratorState, setHistory) {
+    //RandomizedDepthFirstSearch.doSteps(numSteps, board, generatorState, history, setBoard, setGeneratorState, setHistory);
+    RandomizedKruskalsAlgorithm.doSteps(numSteps, board, generatorState, history, setBoard, setGeneratorState, setHistory);
   }
 
   return (
     <div id="app">
       <Controls
-        nextStep={nextStep}
+        doSteps={doSteps}
         board={board}
         generatorState={generatorState}
         history={history}
         historyIndex={historyIndex}
         setBoard={setBoard}
         setGeneratorState={setGeneratorState}
+        setHistory={setHistory}
         setHistoryIndex={setHistoryIndex}
       />
       <Canvas

@@ -1,44 +1,60 @@
 class RandomizedDepthFirstSearch {
-  static nextStep = (board, generatorState, history, setBoard, setGeneratorState, setHistory) => {
+  static doSteps = (numSteps, board, generatorState, history, setBoard, setGeneratorState, setHistory) => {
     let newGeneratorState = this.cloneState(generatorState);
-    let stack = newGeneratorState.stack;
-
+    let newStack = newGeneratorState.stack;
     let newBoard = board.clone();
 
-    if (stack.length === 0) {
-      let startingCell = board.cells[board.cols + 1]
-      newBoard.cells[startingCell.index].isWall = false;
-      newBoard.cells[startingCell.index].isVisited = true;
+    let cumulativeHistory = [];
 
-      stack.push(startingCell);
-    }
+    let currentStep = 0;
 
-    while (stack.length !== 0) {
-      let currentCell = stack.pop();
+    while (currentStep < numSteps) {
 
-      let unvisitedNeighbors = board.unvisitedNeighbors(currentCell);
+      if (newStack.length === 0) {
+        let startingCell = newBoard.cells[newBoard.cols + 1]
+        newBoard.cells[startingCell.index].isWall = false;
+        newBoard.cells[startingCell.index].isVisited = true;
 
-      if (unvisitedNeighbors.length !== 0) {
-        stack.push(currentCell);
-
-        let randomIndex = Math.floor(Math.random() * unvisitedNeighbors.length);
-        let randomNeighbor = unvisitedNeighbors[randomIndex];
-
-        let cellBetween = board.cellBetween(currentCell, randomNeighbor);
-        newBoard.cells[cellBetween.index].isWall = false;
-
-        newBoard.cells[randomNeighbor.index].isWall = false;
-        newBoard.cells[randomNeighbor.index].isVisited = true;
-        stack.push(randomNeighbor);
-
-        break;
+        newStack.push(startingCell);
       }
+
+      while (newStack.length !== 0) {
+        let currentCell = newStack.pop();
+
+        let unvisitedNeighbors = newBoard.unvisitedNeighbors(currentCell);
+
+        if (unvisitedNeighbors.length !== 0) {
+          newStack.push(currentCell);
+
+          let randomIndex = Math.floor(Math.random() * unvisitedNeighbors.length);
+          let randomNeighbor = unvisitedNeighbors[randomIndex];
+
+          let cellBetween = newBoard.cellBetween(currentCell, randomNeighbor);
+          newBoard.cells[cellBetween.index].isWall = false;
+
+          newBoard.cells[randomNeighbor.index].isWall = false;
+          newBoard.cells[randomNeighbor.index].isVisited = true;
+          newStack.push(randomNeighbor);
+
+          break;
+        }
+      }
+
+      // Update history
+      cumulativeHistory = cumulativeHistory.concat([{
+        board: newBoard,
+        generatorState: newGeneratorState
+      }]);
+
+      newGeneratorState = this.cloneState(newGeneratorState);
+      newStack = newGeneratorState.stack;
+      newBoard = newBoard.clone();
+
+      currentStep++;
     }
 
-    setHistory(history.concat([{
-      board: newBoard,
-      generatorState: newGeneratorState
-    }]));
+    // Set all state variables with new values
+    setHistory(history.concat(cumulativeHistory));
 
     setBoard(newBoard);
     setGeneratorState(newGeneratorState);

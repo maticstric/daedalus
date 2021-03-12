@@ -5,7 +5,8 @@ class Selector extends Component {
   render() {
     return (
       <div id='selector-wrapper'>
-        <p>imma selector</p>
+        <button>Randomized Depth First Search</button>
+        <button>Randomized Kruskal’s Algorithm</button>
       </div>
     );
   }
