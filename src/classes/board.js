@@ -21,7 +21,7 @@ class Board {
         let y = height * i;
         let index = i * this.cols + j;
 
-        cells.push(new Cell(x, y, index, width, height, true, false));
+        cells.push(new Cell(x, y, index, width, height, true));
       }
     }
 
@@ -55,20 +55,6 @@ class Board {
     } else if (cellB.index - cellA.index === this.cols * 2) {
       return this.cells[cellA.index + this.cols];
     }
-  }
-
-  unvisitedNeighbors = (cell) => { // Returns neighbors which haven't been visited
-    let neighbors = this.neumannNeighborhood(cell);
-    let unvisitedNeighbors = [];
-
-    for (let i = 0; i < neighbors.length; i++) {
-      let c = neighbors[i];
-      if(!c.isVisited) {
-        unvisitedNeighbors.push(c);
-      }
-    }
-
-    return unvisitedNeighbors;
   }
 
   index = (row, col) => { // Convert from 2d array coordinates to 1d
