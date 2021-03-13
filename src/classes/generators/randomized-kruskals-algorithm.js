@@ -1,64 +1,52 @@
 class RandomizedKruskalsAlgorithm {
-  static doSteps = (numSteps, board, generatorState, history, setBoard, setGeneratorState, setHistory) => {
-    let newGeneratorState = this.cloneState(generatorState);
-    let wallList = newGeneratorState.wallList;
-    let cellSets = newGeneratorState.cellSets;
+  static generate = (board, setHistory) => {
+    let newGeneratorState = this.getInitialState(board.clone());
+    let newWallList = newGeneratorState.wallList;
+    let newCellSets = newGeneratorState.cellSets;
     let newBoard = board.clone();
+    let newHistory = [{
+      board: board.clone(),
+      newWallList: this.getInitialWallList(board.clone()),
+      newCellSets: this.getInitialCellSets(board.clone())
+    }];
 
-    let cumulativeHistory = [];
+    while (newCellSets.length > 1) {
+      let randomWallIndex = Math.floor(Math.random() * newWallList.length);
+      let randomWall = newWallList[randomWallIndex];
 
-    let currentStep = 0;
+      let {cellA, cellB} = this.getCellsDividedByWall(newBoard, randomWall);
+      let setOfCellA = this.getSetWithCellIndex(newCellSets, cellA.index);
+      let setOfCellB = this.getSetWithCellIndex(newCellSets, cellB.index);
 
-    while (currentStep < numSteps) {
+      if (setOfCellA !== setOfCellB) {
+        newBoard.cells[cellA.index].isWall = false;
+        newBoard.cells[cellB.index].isWall = false;
+        newBoard.cells[randomWall.index].isWall = false;
 
-      while (true) {
-        let randomWallIndex = Math.floor(Math.random() * wallList.length);
-        let randomWall = wallList[randomWallIndex];
+        newWallList.splice(randomWallIndex, 1);
 
-        let {cellA, cellB} = this.getCellsDividedByWall(newBoard, randomWall);
-        // TODO: Compare JSONstrings of objects instead of just index
-        let setOfCellA = this.getSetWithCellIndex(cellSets, cellA.index);
-        let setOfCellB = this.getSetWithCellIndex(cellSets, cellB.index);
+        newCellSets.splice(newCellSets.indexOf(setOfCellA), 1);
+        newCellSets.splice(newCellSets.indexOf(setOfCellB), 1);
+        newCellSets.push(new Set([...setOfCellA, ...setOfCellB]));
 
-        if (setOfCellA !== setOfCellB) {
-          newBoard.cells[cellA.index].isWall = false;
-          newBoard.cells[cellB.index].isWall = false;
-          newBoard.cells[randomWall.index].isWall = false;
+        newHistory = newHistory.concat([{
+          board: newBoard,
+          generatorState: newGeneratorState
+        }]);
 
-          wallList.slice(randomWallIndex);
-
-          cellSets.slice(cellSets.indexOf(setOfCellA));
-          cellSets.slice(cellSets.indexOf(setOfCellB));
-          cellSets.push(new Set([...setOfCellA, ...setOfCellB]));
-
-          break;
-        }
+        newGeneratorState = this.cloneState(newGeneratorState);
+        newWallList = newGeneratorState.wallList;
+        newCellSets = newGeneratorState.cellSets;
+        newBoard = newBoard.clone();
       }
-
-      // Update history
-      cumulativeHistory = cumulativeHistory.concat([{
-        board: newBoard,
-        generatorState: newGeneratorState
-      }]);
-
-      newGeneratorState = this.cloneState(newGeneratorState);
-      wallList = newGeneratorState.wallList;
-      cellSets = newGeneratorState.cellSets;
-      newBoard = newBoard.clone();
-
-      currentStep++;
     }
 
-    // Set all state variables with new values
-    setHistory(history.concat(cumulativeHistory));
-
-    setBoard(newBoard);
-    setGeneratorState(newGeneratorState);
+    setHistory(newHistory);
   }
 
   static getInitialState(board) {
     return {
-      wallList: this.getInitialListOfWalls(board),
+      wallList: this.getInitialWallList(board),
       cellSets: this.getInitialCellSets(board)
     }
   }
@@ -115,7 +103,7 @@ class RandomizedKruskalsAlgorithm {
     return { cellA: cellA, cellB: cellB };
   }
 
-  static getInitialListOfWalls(board) {
+  static getInitialWallList(board) {
     let walls = [];
 
     board.cells.forEach((cell) => {

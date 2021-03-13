@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './controls.css';
 
 import FirstSvg from '../../images/first.svg';
@@ -7,80 +7,53 @@ import NextSvg from '../../images/next.svg';
 import LastSvg from '../../images/last.svg';
 
 const Controls = (props) => {
-  const [isFirstDisabled, setIsFirstDisabled] = useState(true);
   const [isPreviousDisabled, setIsPreviousDisabled] = useState(true);
   const [isNextDisabled, setIsNextDisabled] = useState(false);
-  const [isLastDisabled, setIsLastDisabled] = useState(false);
+
+  useEffect(() => {
+    if (props.historyIndex === 0) {
+      setIsPreviousDisabled(true);
+      setIsNextDisabled(false);
+    } else if (props.historyIndex === props.history.length - 1) {
+      setIsPreviousDisabled(false);
+      setIsNextDisabled(true);
+    } else {
+      setIsPreviousDisabled(false);
+      setIsNextDisabled(false);
+    }
+  }, [props.historyIndex, props.history.length]);
 
   const first = () => {
-    setIsPreviousDisabled(true);
-    setIsFirstDisabled(true);
-    setIsNextDisabled(false);
-    setIsLastDisabled(false);
+    let firstBoard = props.history[0].board;
+    let firstGeneratorState = props.history[0].generatorState;
 
-    props.setBoard(props.history[0].board);
-    props.setGeneratorState(props.history[0].generatorState);
+    props.setBoard(firstBoard);
+    props.setGeneratorState(firstGeneratorState);
 
     props.setHistoryIndex(0);
   }
 
   const last = () => {
-    setIsPreviousDisabled(false);
-    setIsFirstDisabled(false);
-    setIsNextDisabled(true);
-    setIsLastDisabled(true);
-
-    let maxHistoryIndex = Math.floor(props.board.cols / 2) * Math.floor(props.board.rows / 2) - 1;
-
     let lastBoard = props.history[props.history.length - 1].board;
     let lastGeneratorState = props.history[props.history.length - 1].generatorState;
-    let lastHistoryIndex = props.history.length - 1;
 
-    let numSteps = maxHistoryIndex - lastHistoryIndex;
+    props.setBoard(lastBoard);
+    props.setGeneratorState(lastGeneratorState);
 
-    props.doSteps(numSteps, lastBoard, lastGeneratorState, props.history, props.setBoard, props.setGeneratorState, props.setHistory);
-
-    props.setHistoryIndex(maxHistoryIndex);
+    props.setHistoryIndex(props.history.length - 1);
   }
 
   const next = () => {
-    let maxHistoryIndex = Math.floor(props.board.cols / 2) * Math.floor(props.board.rows / 2) - 1;
+    let nextBoard = props.history[props.historyIndex + 1].board;
+    let nextGeneratorState = props.history[props.historyIndex + 1].generatorState;
 
-    if (props.historyIndex === maxHistoryIndex - 1) {
-      setIsNextDisabled(true);
-      setIsLastDisabled(true);
-    }
-
-    setIsPreviousDisabled(false);
-    setIsFirstDisabled(false);
-
-    let lastBoard = props.history[props.history.length - 1].board;
-    let lastGeneratorState = props.history[props.history.length - 1].generatorState;
-
-    // If on last board in history, generate new
-    if (JSON.stringify(lastBoard) === JSON.stringify(props.board) &&
-        JSON.stringify(lastGeneratorState) === JSON.stringify(props.generatorState)) {
-      props.doSteps(1, props.board, props.generatorState, props.history, props.setBoard, props.setGeneratorState, props.setHistory);
-    } else { // ... if not, just keep going forward in history
-      let nextBoard = props.history[props.historyIndex + 1].board;
-      let nextGeneratorState = props.history[props.historyIndex + 1].generatorState;
-
-      props.setBoard(nextBoard);
-      props.setGeneratorState(nextGeneratorState);
-    }
+    props.setBoard(nextBoard);
+    props.setGeneratorState(nextGeneratorState);
 
     props.setHistoryIndex(props.historyIndex + 1);
   }
 
   const previous = () => {
-    if (props.historyIndex === 1) {
-      setIsPreviousDisabled(true);
-      setIsFirstDisabled(true);
-    }
-
-    setIsNextDisabled(false);
-    setIsLastDisabled(false);
-
     let previousBoard = props.history[props.historyIndex - 1].board;
     let previousGeneratorState = props.history[props.historyIndex - 1].generatorState;
 
@@ -95,7 +68,7 @@ const Controls = (props) => {
       <input
         type="image"
         alt="first"
-        disabled={isFirstDisabled}
+        disabled={isPreviousDisabled}
         onClick={first}
         src={FirstSvg}
       />
@@ -116,7 +89,7 @@ const Controls = (props) => {
       <input
         type="image"
         alt="last"
-        disabled={isLastDisabled}
+        disabled={isNextDisabled}
         onClick={last}
         src={LastSvg}
       />
