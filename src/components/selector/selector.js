@@ -13,10 +13,15 @@ const Selector = (props) => {
     props.resetAndGenerate(Generators.RandomizedKruskalsAlgorithm);
   }
 
+  const generateRandomizedPrimsAlgorithm = () => {
+    props.resetAndGenerate(Generators.RandomizedPrimsAlgorithm);
+  }
+
   return (
     <div id='selector-wrapper'>
       <button onClick={generateRandomizedDepthFirstSearch}>Randomized Depth First Search</button>
       <button onClick={generateRandomizedKruskalsAlgorithm}>Randomized Kruskal’s Algorithm</button>
+      <button onClick={generateRandomizedPrimsAlgorithm}>Randomized Prim’s Algorithm</button>
     </div>
   );
 };
