@@ -1,9 +1,9 @@
 class RandomizedKruskalsAlgorithm {
   static generate = (board, setHistory) => {
-    let newGeneratorState = this.getInitialState(board.clone());
+    let newGeneratorState = this.getInitialState(board);
     let newWallList = newGeneratorState.wallList;
     let newCellSets = newGeneratorState.cellSets;
-    let newBoard = board.clone();
+    let newBoard = board;
     let newHistory = [{
       board: board.clone(),
       newWallList: this.getInitialWallList(board.clone()),
@@ -14,9 +14,9 @@ class RandomizedKruskalsAlgorithm {
       let randomWallIndex = Math.floor(Math.random() * newWallList.length);
       let randomWall = newWallList[randomWallIndex];
 
-      let {cellA, cellB} = this.getCellsDividedByWall(newBoard, randomWall);
-      let setOfCellA = this.getSetWithCellIndex(newCellSets, cellA.index);
-      let setOfCellB = this.getSetWithCellIndex(newCellSets, cellB.index);
+      let {cellA, cellB} = newBoard.getCellsDividedByWall(randomWall);
+      let setOfCellA = this.getSetWithCell(newCellSets, cellA);
+      let setOfCellB = this.getSetWithCell(newCellSets, cellB);
 
       if (setOfCellA !== setOfCellB) {
         newBoard.cells[cellA.index].isWall = false;
@@ -34,51 +34,21 @@ class RandomizedKruskalsAlgorithm {
           generatorState: newGeneratorState
         }]);
 
-        newGeneratorState = this.cloneState(newGeneratorState);
+        newBoard = newBoard.clone();
+        newGeneratorState = this.cloneState(newBoard, newGeneratorState);
         newWallList = newGeneratorState.wallList;
         newCellSets = newGeneratorState.cellSets;
-        newBoard = newBoard.clone();
       }
     }
 
     setHistory(newHistory);
   }
 
-  static getInitialState(board) {
-    return {
-      wallList: this.getInitialWallList(board),
-      cellSets: this.getInitialCellSets(board)
-    }
-  }
-
-  static cloneState(state) {
-    let newWallList = []; 
-    let newCellSets = []; 
-
-    state.wallList.forEach((cell) => {
-      let newCell = cell.clone();
-
-      newWallList.push(newCell);
-    });
-
-    state.cellSets.forEach((set) => {
-      let newSet = new Set(set);
-
-      newCellSets.push(newSet);
-    });
-
-    return {
-      wallList: newWallList,
-      cellSets: newCellSets
-    }
-  }
-
-  static getSetWithCellIndex(sets, index) {
+  static getSetWithCell(sets, cell) {
     let set;
-
     sets.forEach((s) => {
-      s.forEach((cell) => {
-        if (cell.index === index) {
+      s.forEach((c) => {
+        if (c === cell) {
           set = s;
         }
       });
@@ -86,22 +56,20 @@ class RandomizedKruskalsAlgorithm {
 
     return set;
   }
+  
+  //static getSetWithCellIndex(sets, index) {
+  //  let set;
 
-  static getCellsDividedByWall(board, wall) {
-    let {row, col} = board.getRowAndCol(wall);
-    let cellA;
-    let cellB;
+  //  sets.forEach((s) => {
+  //    s.forEach((cell) => {
+  //      if (cell.index === index) {
+  //        set = s;
+  //      }
+  //    });
+  //  });
 
-    if (row % 2 === 0) {
-      cellA = board.cells[wall.index - board.cols];
-      cellB = board.cells[wall.index + board.cols];
-    } else if (col % 2 === 0) {
-      cellA = board.cells[wall.index - 1];
-      cellB = board.cells[wall.index + 1];
-    }
-
-    return { cellA: cellA, cellB: cellB };
-  }
+  //  return set;
+  //}
 
   static getInitialWallList(board) {
     let walls = [];
@@ -137,6 +105,40 @@ class RandomizedKruskalsAlgorithm {
     });
 
     return cellSets;
+  }
+
+  static getInitialState(board) {
+    return {
+      wallList: this.getInitialWallList(board),
+      cellSets: this.getInitialCellSets(board)
+    }
+  }
+
+  static cloneState(board, state) {
+    let newWallList = []; 
+    let newCellSets = []; 
+
+    state.wallList.forEach((cell) => {
+      let newCell = board.cells[cell.index];
+
+      newWallList.push(newCell);
+    });
+
+    state.cellSets.forEach((set) => {
+      let newSet = new Set();
+
+      set.forEach((cell) => {
+        let newCell = board.cells[cell.index];
+        newSet.add(newCell);
+      });
+
+      newCellSets.push(newSet);
+    });
+
+    return {
+      wallList: newWallList,
+      cellSets: newCellSets
+    }
   }
 }
 

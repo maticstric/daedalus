@@ -2,7 +2,7 @@ class RandomizedDepthFirstSearch {
   static generate = (board, setHistory) => {
     let newGeneratorState = this.getInitialState();
     let newStack = newGeneratorState.stack;
-    let newBoard = board.clone();
+    let newBoard = board;
     let newHistory = [{
       board: board.clone(),
       stack: []
@@ -37,9 +37,9 @@ class RandomizedDepthFirstSearch {
           generatorState: newGeneratorState
         }]);
 
-        newGeneratorState = this.cloneState(newGeneratorState);
-        newStack = newGeneratorState.stack;
         newBoard = newBoard.clone();
+        newGeneratorState = this.cloneState(newBoard, newGeneratorState);
+        newStack = newGeneratorState.stack;
       }
     }
 
@@ -66,11 +66,11 @@ class RandomizedDepthFirstSearch {
     }
   }
 
-  static cloneState(state) {
+  static cloneState(board, state) {
     let newStack = []; 
 
     state.stack.forEach((cell) => {
-      let newCell = cell.clone();
+      let newCell = board.cells[cell.index];
 
       newStack.push(newCell);
     });

@@ -57,6 +57,23 @@ class Board {
     }
   }
 
+  getCellsDividedByWall(wall) {
+    let {row, col} = this.getRowAndCol(wall);
+    let cellA;
+    let cellB;
+
+    if (row % 2 === 0) {
+      cellA = this.cells[wall.index - this.cols];
+      cellB = this.cells[wall.index + this.cols];
+    } else if (col % 2 === 0) {
+      cellA = this.cells[wall.index - 1];
+      cellB = this.cells[wall.index + 1];
+    }
+
+    return { cellA: cellA, cellB: cellB };
+  }
+
+
   index = (row, col) => { // Convert from 2d array coordinates to 1d
     if (row < 0 || col < 0 || row > this.rows - 1 || col > this.cols - 1) {
       return -1; // Invalid index

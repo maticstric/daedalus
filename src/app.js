@@ -8,6 +8,7 @@ import Board from './classes/board.js';
 import Generators from './generators.js';
 import RandomizedDepthFirstSearch from './classes/generators/randomized-depth-first-search.js';
 import RandomizedKruskalsAlgorithm from './classes/generators/randomized-kruskals-algorithm.js';
+import RandomizedPrimsAlgorithm from './classes/generators/randomized-prims-algorithm.js';
 
 const MAZE_ROWS = 5;
 const MAZE_COLS = 5;
@@ -22,7 +23,7 @@ const App = (props) => {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    generate(Generators.RandomizedDepthFirstSearch, board, setHistory);
+    generate(Generators.RandomizedDepthFirstSearch, board.clone(), setHistory);
   }, []);
 
   const resetAndGenerate = (generator) => {
@@ -38,9 +39,11 @@ const App = (props) => {
 
   const generate = (generator, board, setHistory) => {
     if (generator === Generators.RandomizedDepthFirstSearch) {
-      RandomizedDepthFirstSearch.generate(board, setHistory);
+      RandomizedDepthFirstSearch.generate(board.clone(), setHistory);
     } else if (generator === Generators.RandomizedKruskalsAlgorithm) {
-      RandomizedKruskalsAlgorithm.generate(board, setHistory);
+      RandomizedKruskalsAlgorithm.generate(board.clone(), setHistory);
+    } else if (generator === Generators.RandomizedPrimsAlgorithm) {
+      RandomizedPrimsAlgorithm.generate(board.clone(), setHistory);
     }
   }
 
