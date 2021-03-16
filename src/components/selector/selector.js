@@ -19,9 +19,10 @@ const Selector = (props) => {
 
   return (
     <div id='selector-wrapper'>
-      <button onClick={generateRandomizedDepthFirstSearch}>Randomized Depth First Search</button>
-      <button onClick={generateRandomizedKruskalsAlgorithm}>Randomized Kruskal’s Algorithm</button>
-      <button onClick={generateRandomizedPrimsAlgorithm}>Randomized Prim’s Algorithm</button>
+      <h2>maze generation algorithms</h2>
+      <button onClick={generateRandomizedDepthFirstSearch}>randomized depth first search</button>
+      <button onClick={generateRandomizedKruskalsAlgorithm}>randomized kruskal’s algorithm</button>
+      <button onClick={generateRandomizedPrimsAlgorithm}>randomized prim’s algorithm</button>
     </div>
   );
 };

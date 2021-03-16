@@ -1,8 +1,26 @@
-body {
-  background: #2c3035;
+:root {
+  --grey: #4c4e57;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: local('Inconsolata'), url(./fonts/Inconsolata-Black.ttf) format('truetype');
 }
 
 #app {
+  height: 100vh;
+  background: var(--grey);
+  color: var(--white);
+  font-family: Inconsolata;
   display: flex;
   justify-content: space-around;
+}
+
+#app > #center {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 20px;
 }

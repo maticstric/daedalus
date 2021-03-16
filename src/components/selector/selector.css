@@ -1,5 +1,33 @@
 #selector-wrapper {
-  outline: 1px solid green;
   display: flex;
   flex-direction: column;
+  background-color: var(--black);
+  border-radius: 8px;
+  margin: 20px;
+}
+
+#selector-wrapper > h2 {
+  text-align: center;
+  margin: 25px;
+}
+
+#selector-wrapper > button {
+  border: 0;
+  background-color: var(--grey);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 1.1em;
+  padding: 10px;
+  margin: 5px 20px 5px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+#selector-wrapper > button:hover {
+  transform: scale(1.03);
+}
+
+#selector-wrapper > button:focus {
+  outline: 0;
 }

@@ -1,0 +1,11 @@
+#playback-wrapper {
+  margin: 10px;
+}
+
+#playback-wrapper input:focus {
+  outline: 0;
+}
+
+#playback-wrapper input:disabled {
+  opacity: 0.5;
+}

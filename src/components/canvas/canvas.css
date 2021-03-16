@@ -1,11 +1,9 @@
 #canvas {
   background: gray;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 #canvas-wrapper {
-  outline: 1px solid blue;
-  height: 100vh;
   display: flex;
   align-items: center;
 }

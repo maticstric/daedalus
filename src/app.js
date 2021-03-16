@@ -47,24 +47,34 @@ const App = (props) => {
     }
   }
 
+  const generatorText = (generator) => {
+    if (generator === Generators.RandomizedDepthFirstSearch) {
+      return 'randomized depth first search';
+    } else if (generator === Generators.RandomizedKruskalsAlgorithm) {
+      return 'randomized kruskal’s algorithn';
+    } else if (generator === Generators.RandomizedPrimsAlgorithm) {
+      return 'randomized prim’s algorithm';
+    }
+  }
+
   return (
     <div id="app">
       <Controls
-        generator={generator}
-        board={board}
-        generatorState={generatorState}
-        history={history}
         historyIndex={historyIndex}
+        history={history}
         setBoard={setBoard}
         setGeneratorState={setGeneratorState}
-        setHistory={setHistory}
         setHistoryIndex={setHistoryIndex}
       />
-      <Canvas
-        board={board}
-        canvasWidth={CANVAS_WIDTH}
-        canvasHeight={CANVAS_HEIGHT}
-      />
+      <div id="center">
+        <h1>daedalus</h1>
+        <h2>{generatorText(generator)}</h2>
+        <Canvas
+          board={board}
+          canvasWidth={CANVAS_WIDTH}
+          canvasHeight={CANVAS_HEIGHT}
+        />
+      </div>
       <Selector
         resetAndGenerate={resetAndGenerate}
       />
