@@ -5,24 +5,24 @@ import Generators from '../../generators.js';
 
 const Selector = (props) => {
 
-  const generateRandomizedDepthFirstSearch = () => {
-    props.resetAndGenerate(Generators.RandomizedDepthFirstSearch);
+  const setToRandomizedDepthFirstSearch = () => {
+    props.setGenerator(Generators.RandomizedDepthFirstSearch);
   }
 
-  const generateRandomizedKruskalsAlgorithm = () => {
-    props.resetAndGenerate(Generators.RandomizedKruskalsAlgorithm);
+  const setToRandomizedKruskalsAlgorithm = () => {
+    props.setGenerator(Generators.RandomizedKruskalsAlgorithm)
   }
 
-  const generateRandomizedPrimsAlgorithm = () => {
-    props.resetAndGenerate(Generators.RandomizedPrimsAlgorithm);
+  const setToRandomizedPrimsAlgorithm = () => {
+    props.setGenerator(Generators.RandomizedPrimsAlgorithm);
   }
 
   return (
     <div id='selector-wrapper'>
       <h2>maze generation algorithms</h2>
-      <button onClick={generateRandomizedDepthFirstSearch}>randomized depth first search</button>
-      <button onClick={generateRandomizedKruskalsAlgorithm}>randomized kruskal’s algorithm</button>
-      <button onClick={generateRandomizedPrimsAlgorithm}>randomized prim’s algorithm</button>
+      <button onClick={setToRandomizedDepthFirstSearch}>randomized depth first search</button>
+      <button onClick={setToRandomizedKruskalsAlgorithm}>randomized kruskal’s algorithm</button>
+      <button onClick={setToRandomizedPrimsAlgorithm}>randomized prim’s algorithm</button>
     </div>
   );
 };

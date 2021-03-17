@@ -1,10 +1,12 @@
+import Board from '../board.js';
+
 class RandomizedPrimsAlgorithm {
-  static generate = (board, setHistory) => {
+  static generate = (size, canvasSize, setBoard, setHistory, setHistoryIndex) => {
+    let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
     let newGeneratorState = this.getInitialState();
     let newWallList = newGeneratorState.wallList;
-    let newBoard = board;
     let newHistory = [{
-      board: board.clone(),
+      board: newBoard.clone(),
       wallList: []
     }];
 
@@ -44,6 +46,8 @@ class RandomizedPrimsAlgorithm {
       newWallList.splice(randomIndex, 1);
     }
 
+    setHistoryIndex(newHistory.length - 1);
+    setBoard(newBoard);
     setHistory(newHistory);
   }
 

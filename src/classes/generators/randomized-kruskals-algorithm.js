@@ -1,13 +1,15 @@
+import Board from '../board.js';
+
 class RandomizedKruskalsAlgorithm {
-  static generate = (board, setHistory) => {
-    let newGeneratorState = this.getInitialState(board);
+  static generate = (size, canvasSize, setBoard, setHistory, setHistoryIndex) => {
+    let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
+    let newGeneratorState = this.getInitialState(newBoard);
     let newWallList = newGeneratorState.wallList;
     let newCellSets = newGeneratorState.cellSets;
-    let newBoard = board;
     let newHistory = [{
-      board: board.clone(),
-      newWallList: this.getInitialWallList(board.clone()),
-      newCellSets: this.getInitialCellSets(board.clone())
+      board: newBoard.clone(),
+      newWallList: this.getInitialWallList(newBoard.clone()),
+      newCellSets: this.getInitialCellSets(newBoard.clone())
     }];
 
     while (newCellSets.length > 1) {
@@ -41,6 +43,8 @@ class RandomizedKruskalsAlgorithm {
       }
     }
 
+    setHistoryIndex(newHistory.length - 1);
+    setBoard(newBoard);
     setHistory(newHistory);
   }
 
@@ -56,20 +60,6 @@ class RandomizedKruskalsAlgorithm {
 
     return set;
   }
-  
-  //static getSetWithCellIndex(sets, index) {
-  //  let set;
-
-  //  sets.forEach((s) => {
-  //    s.forEach((cell) => {
-  //      if (cell.index === index) {
-  //        set = s;
-  //      }
-  //    });
-  //  });
-
-  //  return set;
-  //}
 
   static getInitialWallList(board) {
     let walls = [];

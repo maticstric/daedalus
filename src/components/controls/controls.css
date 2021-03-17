@@ -1,14 +1,11 @@
 #controls-wrapper {
   background-color: var(--black);
   border-radius: 8px;
-  margin: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-#controls-wrapper input:hover:enabled {
-  background-color: var(--grey);
-  border-radius: 50%;
-}
-
-#controls-wrapper input:focus {
-  outline: 0;
+#controls-wrapper > h2 {
+  text-align: center;
+  margin: 25px;
 }

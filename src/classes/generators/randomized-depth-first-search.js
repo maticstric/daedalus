@@ -1,10 +1,12 @@
+import Board from '../board.js';
+
 class RandomizedDepthFirstSearch {
-  static generate = (board, setHistory) => {
+  static generate = (size, canvasSize, setBoard, setHistory, setHistoryIndex) => {
+    let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
     let newGeneratorState = this.getInitialState();
     let newStack = newGeneratorState.stack;
-    let newBoard = board;
     let newHistory = [{
-      board: board.clone(),
+      board: newBoard.clone(),
       stack: []
     }];
 
@@ -43,6 +45,8 @@ class RandomizedDepthFirstSearch {
       }
     }
 
+    setHistoryIndex(newHistory.length - 1);
+    setBoard(newBoard);
     setHistory(newHistory);
   }
 
