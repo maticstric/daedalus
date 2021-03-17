@@ -5,6 +5,9 @@ import FirstSvg from '../../images/first.svg';
 import PreviousSvg from '../../images/previous.svg';
 import NextSvg from '../../images/next.svg';
 import LastSvg from '../../images/last.svg';
+import PlaySvg from '../../images/play.svg';
+import PauseSvg from '../../images/pause.svg';
+import ReplaySvg from '../../images/replay.svg';
 
 const Playback = (props) => {
   const [isPreviousDisabled, setIsPreviousDisabled] = useState(true);
@@ -78,6 +81,12 @@ const Playback = (props) => {
         disabled={isPreviousDisabled}
         onClick={previous}
         src={PreviousSvg}
+      />
+      <input
+        type="image"
+        alt="play-pause-replay"
+        onClick={() => { } }
+        src={PlaySvg}
       />
       <input
         type="image"
