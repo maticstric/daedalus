@@ -15,7 +15,6 @@ const Controls = (props) => {
         historyIndex={props.historyIndex}
         history={props.history}
         setBoard={props.setBoard}
-        setGeneratorState={props.setGeneratorState}
         setHistoryIndex={props.setHistoryIndex}
       />
     </div>

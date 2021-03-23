@@ -34,8 +34,7 @@ class RandomizedPrimsAlgorithm {
         newWallList.push(...wallNeumannNeighborhood);
 
         newHistory = newHistory.concat([{
-          board: newBoard,
-          generatorState: newGeneratorState
+          board: newBoard
         }]);
 
         newBoard = newBoard.clone();

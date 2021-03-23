@@ -28,40 +28,28 @@ const Playback = (props) => {
 
   const first = () => {
     let firstBoard = props.history[0].board;
-    let firstGeneratorState = props.history[0].generatorState;
-
     props.setBoard(firstBoard);
-    props.setGeneratorState(firstGeneratorState);
 
     props.setHistoryIndex(0);
   }
 
   const last = () => {
     let lastBoard = props.history[props.history.length - 1].board;
-    let lastGeneratorState = props.history[props.history.length - 1].generatorState;
-
     props.setBoard(lastBoard);
-    props.setGeneratorState(lastGeneratorState);
 
     props.setHistoryIndex(props.history.length - 1);
   }
 
   const next = () => {
     let nextBoard = props.history[props.historyIndex + 1].board;
-    let nextGeneratorState = props.history[props.historyIndex + 1].generatorState;
-
     props.setBoard(nextBoard);
-    props.setGeneratorState(nextGeneratorState);
 
     props.setHistoryIndex(props.historyIndex + 1);
   }
 
   const previous = () => {
     let previousBoard = props.history[props.historyIndex - 1].board;
-    let previousGeneratorState = props.history[props.historyIndex - 1].generatorState;
-
     props.setBoard(previousBoard);
-    props.setGeneratorState(previousGeneratorState);
 
     props.setHistoryIndex(props.historyIndex - 1);
   }

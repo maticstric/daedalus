@@ -35,8 +35,7 @@ class RandomizedDepthFirstSearch {
         newStack.push(randomNeighbor);
 
         newHistory = newHistory.concat([{
-          board: newBoard,
-          generatorState: newGeneratorState
+          board: newBoard
         }]);
 
         newBoard = newBoard.clone();

@@ -14,7 +14,6 @@ const App = (props) => {
   const [size, setSize] = useState(10);
   const [canvasSize, setCanvasSize] = useState(546);
   const [board, setBoard] = useState(null);
-  const [generatorState, setGeneratorState] = useState(null);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [history, setHistory] = useState([]);
 
@@ -54,7 +53,6 @@ const App = (props) => {
         historyIndex={historyIndex}
         history={history}
         setBoard={setBoard}
-        setGeneratorState={setGeneratorState}
         setHistoryIndex={setHistoryIndex}
         setSize={setSize}
       />

@@ -32,8 +32,7 @@ class RandomizedKruskalsAlgorithm {
         newCellSets.push(new Set([...setOfCellA, ...setOfCellB]));
 
         newHistory = newHistory.concat([{
-          board: newBoard,
-          generatorState: newGeneratorState
+          board: newBoard
         }]);
 
         newBoard = newBoard.clone();
