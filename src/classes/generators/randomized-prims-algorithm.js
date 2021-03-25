@@ -1,14 +1,11 @@
 import Board from '../board.js';
 
 class RandomizedPrimsAlgorithm {
-  static generate = (size, canvasSize, setBoard, setHistory, setHistoryIndex) => {
+  static generate = (size, canvasSize, setHistory, setHistoryIndex) => {
     let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
     let newGeneratorState = this.getInitialState();
     let newWallList = newGeneratorState.wallList;
-    let newHistory = [{
-      board: newBoard.clone(),
-      wallList: []
-    }];
+    let newHistory = [newBoard.clone()];
 
     if (newWallList.length === 0) {
       let startingCell = newBoard.cells[newBoard.cols + 1]
@@ -33,9 +30,7 @@ class RandomizedPrimsAlgorithm {
         let wallNeumannNeighborhood = this.wallNeumannNeighborhood(newBoard, cellWhichIsWall);
         newWallList.push(...wallNeumannNeighborhood);
 
-        newHistory = newHistory.concat([{
-          board: newBoard
-        }]);
+        newHistory.push(newBoard);
 
         newBoard = newBoard.clone();
         newGeneratorState = this.cloneState(newBoard, newGeneratorState);
@@ -45,9 +40,8 @@ class RandomizedPrimsAlgorithm {
       newWallList.splice(randomIndex, 1);
     }
 
-    setHistoryIndex(newHistory.length - 1);
-    setBoard(newBoard);
     setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
   }
 
   static wallNeumannNeighborhood(board, cell) {

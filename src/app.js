@@ -11,9 +11,9 @@ import RandomizedPrimsAlgorithm from './classes/generators/randomized-prims-algo
 
 const App = (props) => {
   const [generator, setGenerator] = useState(Generators.RandomizedDepthFirstSearch);
+  const [generatorText, setGeneratorText] = useState('randomized depth first search');
   const [size, setSize] = useState(10);
   const [canvasSize, setCanvasSize] = useState(546);
-  const [board, setBoard] = useState(null);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [history, setHistory] = useState([]);
 
@@ -29,38 +29,31 @@ const App = (props) => {
     setCanvasSize(canvasSize);
 
     if (generator === Generators.RandomizedDepthFirstSearch) {
-      RandomizedDepthFirstSearch.generate(size, canvasSize, setBoard, setHistory, setHistoryIndex);
+      RandomizedDepthFirstSearch.generate(size, canvasSize, setHistory, setHistoryIndex);
+      setGeneratorText('randomized depth first search');
     } else if (generator === Generators.RandomizedKruskalsAlgorithm) {
-      RandomizedKruskalsAlgorithm.generate(size, canvasSize, setBoard, setHistory, setHistoryIndex);
+      RandomizedKruskalsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex);
+      setGeneratorText('randomized kruskal’s algorithm');
     } else if (generator === Generators.RandomizedPrimsAlgorithm) {
-      RandomizedPrimsAlgorithm.generate(size, canvasSize, setBoard, setHistory, setHistoryIndex);
+      RandomizedPrimsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex);
+      setGeneratorText('randomized prim’s algorithm');
     }
   }, [generator, size]);
-
-  const generatorText = (generator) => {
-    if (generator === Generators.RandomizedDepthFirstSearch) {
-      return 'randomized depth first search';
-    } else if (generator === Generators.RandomizedKruskalsAlgorithm) {
-      return 'randomized kruskal’s algorithm';
-    } else if (generator === Generators.RandomizedPrimsAlgorithm) {
-      return 'randomized prim’s algorithm';
-    }
-  }
 
   return (
     <div id="app">
       <Controls
         historyIndex={historyIndex}
         history={history}
-        setBoard={setBoard}
         setHistoryIndex={setHistoryIndex}
         setSize={setSize}
       />
       <div id="center">
         <h1>daedalus</h1>
-        <h2>{generatorText(generator)}</h2>
+        <h2>{generatorText}</h2>
         <Canvas
-          board={board}
+          history={history}
+          historyIndex={historyIndex}
           canvasSize={canvasSize}
         />
       </div>

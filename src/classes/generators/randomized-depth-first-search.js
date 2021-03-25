@@ -1,14 +1,11 @@
 import Board from '../board.js';
 
 class RandomizedDepthFirstSearch {
-  static generate = (size, canvasSize, setBoard, setHistory, setHistoryIndex) => {
+  static generate = (size, canvasSize, setHistory, setHistoryIndex) => {
     let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
     let newGeneratorState = this.getInitialState();
     let newStack = newGeneratorState.stack;
-    let newHistory = [{
-      board: newBoard.clone(),
-      stack: []
-    }];
+    let newHistory = [newBoard.clone()];
 
     if (newStack.length === 0) {
       let startingCell = newBoard.cells[newBoard.cols + 1]
@@ -34,9 +31,7 @@ class RandomizedDepthFirstSearch {
         newBoard.cells[randomNeighbor.index].isWall = false;
         newStack.push(randomNeighbor);
 
-        newHistory = newHistory.concat([{
-          board: newBoard
-        }]);
+        newHistory.push(newBoard);
 
         newBoard = newBoard.clone();
         newGeneratorState = this.cloneState(newBoard, newGeneratorState);
@@ -44,9 +39,8 @@ class RandomizedDepthFirstSearch {
       }
     }
 
-    setHistoryIndex(newHistory.length - 1);
-    setBoard(newBoard);
     setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
   }
 
   static wallNeighbors = (board, cell) => {

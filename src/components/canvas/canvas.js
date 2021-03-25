@@ -13,26 +13,28 @@ const Canvas = (props) => {
     ctx.canvas.width = props.canvasSize;
     ctx.canvas.height = props.canvasSize;
 
-    const showBoard = (ctx) => {
-      props.board.cells.forEach(cell => {
-        if (cell.isWall) {
-          ctx.fillStyle = Colors.black;
-        } else {
-          ctx.fillStyle = Colors.white;
-        }
+    const showBoard = (board, ctx) => {
+      if (board) {
+        board.cells.forEach(cell => {
+          if (cell.isWall) {
+            ctx.fillStyle = Colors.black;
+          } else {
+            ctx.fillStyle = Colors.white;
+          }
 
-        ctx.fillRect(cell.x, cell.y, cell.width, cell.height);
-        ctx.stroke();
-      });
+          ctx.fillRect(cell.x, cell.y, cell.width, cell.height);
+          ctx.stroke();
+        });
+      } else {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
     }
 
-    if (props.board) {
-      showBoard(ctx);
-    } else {
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-  }, [props.board, props.canvasSize]);
+    let board = props.history[props.historyIndex];
+
+    showBoard(board, ctx);
+  }, [props.historyIndex, props.history, props.canvasSize]);
 
   return (
     <div id="canvas-wrapper">

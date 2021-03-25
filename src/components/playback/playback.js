@@ -7,11 +7,24 @@ import NextSvg from '../../images/next.svg';
 import LastSvg from '../../images/last.svg';
 import PlaySvg from '../../images/play.svg';
 import PauseSvg from '../../images/pause.svg';
-import ReplaySvg from '../../images/replay.svg';
+
+class CancellationToken {
+  constructor() {
+    this.isCancellationRequested = false; 
+  }
+
+  cancel() {
+    this.isCancellationRequested = true;
+  }
+}
 
 const Playback = (props) => {
   const [isPreviousDisabled, setIsPreviousDisabled] = useState(true);
   const [isNextDisabled, setIsNextDisabled] = useState(false);
+  const [isMainButtonDisabled, setIsMainButtonDisabled] = useState(false);
+  const [cancellationToken, setCancellationToken] = useState(new CancellationToken());
+  const [mainButtonState, setMainButtonState] = useState('play');
+  const [mainButtonSvg, setMainButtonSvg] = useState(PlaySvg);
 
   useEffect(() => {
     if (props.historyIndex === 0) {
@@ -24,34 +37,80 @@ const Playback = (props) => {
       setIsPreviousDisabled(false);
       setIsNextDisabled(false);
     }
-  }, [props.historyIndex, props.history.length]);
+
+    if (props.historyIndex === props.history.length - 1) {
+      setIsMainButtonDisabled(true);
+    } else {
+      setIsMainButtonDisabled(false);
+    }
+
+    if (mainButtonState === 'pause') {
+      setIsPreviousDisabled(true);
+      setIsNextDisabled(true);
+    }
+  }, [mainButtonState, props.historyIndex, props.history.length]);
+
+  useEffect(() => {
+    if (mainButtonState === 'play') {
+      setMainButtonSvg(PlaySvg);
+    } else if (mainButtonState === 'pause') {
+      setMainButtonSvg(PauseSvg);
+    }
+  }, [mainButtonState]);
 
   const first = () => {
-    let firstBoard = props.history[0].board;
-    props.setBoard(firstBoard);
-
     props.setHistoryIndex(0);
   }
 
   const last = () => {
-    let lastBoard = props.history[props.history.length - 1].board;
-    props.setBoard(lastBoard);
-
     props.setHistoryIndex(props.history.length - 1);
   }
 
   const next = () => {
-    let nextBoard = props.history[props.historyIndex + 1].board;
-    props.setBoard(nextBoard);
-
-    props.setHistoryIndex(props.historyIndex + 1);
+    let historyIndex = props.historyIndex;
+    props.setHistoryIndex(historyIndex + 1);
   }
 
   const previous = () => {
-    let previousBoard = props.history[props.historyIndex - 1].board;
-    props.setBoard(previousBoard);
+    let historyIndex = props.historyIndex;
+    props.setHistoryIndex(historyIndex - 1);
+  }
 
-    props.setHistoryIndex(props.historyIndex - 1);
+  const play = async () => {
+    let historyIndex = props.historyIndex;
+
+    props.setHistoryIndex(historyIndex + 1);
+    historyIndex += 1;
+
+    while (historyIndex < props.history.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      if(cancellationToken.isCancellationRequested) {
+        setCancellationToken(new CancellationToken());
+        return;
+      }
+      
+      props.setHistoryIndex(historyIndex + 1);
+      historyIndex += 1;
+    }
+
+    setMainButtonState('play');
+  }
+
+  const pause = async () => {
+    cancellationToken.cancel();
+  }
+
+  const mainButtonOnClick = async () => {
+    if (mainButtonState === 'play') {
+      setMainButtonState('pause');
+
+      play();
+    } else if (mainButtonState === 'pause') {
+      setMainButtonState('play');
+
+      pause();
+    }
   }
 
   return (
@@ -72,9 +131,10 @@ const Playback = (props) => {
       />
       <input
         type="image"
-        alt="play-pause-replay"
-        onClick={() => { } }
-        src={PlaySvg}
+        alt="play-pause"
+        disabled={isMainButtonDisabled}
+        onClick={mainButtonOnClick}
+        src={mainButtonSvg}
       />
       <input
         type="image"

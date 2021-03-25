@@ -14,7 +14,6 @@ const Controls = (props) => {
       <Playback
         historyIndex={props.historyIndex}
         history={props.history}
-        setBoard={props.setBoard}
         setHistoryIndex={props.setHistoryIndex}
       />
     </div>

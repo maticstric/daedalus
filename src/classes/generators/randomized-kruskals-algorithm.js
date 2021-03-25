@@ -1,16 +1,12 @@
 import Board from '../board.js';
 
 class RandomizedKruskalsAlgorithm {
-  static generate = (size, canvasSize, setBoard, setHistory, setHistoryIndex) => {
+  static generate = (size, canvasSize, setHistory, setHistoryIndex) => {
     let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
     let newGeneratorState = this.getInitialState(newBoard);
     let newWallList = newGeneratorState.wallList;
     let newCellSets = newGeneratorState.cellSets;
-    let newHistory = [{
-      board: newBoard.clone(),
-      newWallList: this.getInitialWallList(newBoard.clone()),
-      newCellSets: this.getInitialCellSets(newBoard.clone())
-    }];
+    let newHistory = [newBoard.clone()];
 
     while (newCellSets.length > 1) {
       let randomWallIndex = Math.floor(Math.random() * newWallList.length);
@@ -31,9 +27,7 @@ class RandomizedKruskalsAlgorithm {
         newCellSets.splice(newCellSets.indexOf(setOfCellB), 1);
         newCellSets.push(new Set([...setOfCellA, ...setOfCellB]));
 
-        newHistory = newHistory.concat([{
-          board: newBoard
-        }]);
+        newHistory.push(newBoard);
 
         newBoard = newBoard.clone();
         newGeneratorState = this.cloneState(newBoard, newGeneratorState);
@@ -42,9 +36,8 @@ class RandomizedKruskalsAlgorithm {
       }
     }
 
-    setHistoryIndex(newHistory.length - 1);
-    setBoard(newBoard);
     setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
   }
 
   static getSetWithCell(sets, cell) {
