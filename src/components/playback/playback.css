@@ -1,8 +1,10 @@
 #playback-wrapper {
-  margin: 5px 20px 5px 20px;
+  margin: 20px 20px 0px 20px;
   padding: 5px;
   border-radius: 5px;
   background: var(--grey);
+  display: flex;
+  justify-content: space-between;
 }
 
 #playback-wrapper > input:focus {

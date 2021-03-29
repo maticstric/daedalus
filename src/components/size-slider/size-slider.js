@@ -10,6 +10,7 @@ const SizeSlider = (props) => {
       <div id="slider-wrapper">
         <span>2</span>
         <input
+          disabled={props.isPlaying}
           type="range"
           min="2"
           max="30"

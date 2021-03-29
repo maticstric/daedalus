@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './playback.css';
 
 import FirstSvg from '../../images/first.svg';
@@ -8,23 +8,15 @@ import LastSvg from '../../images/last.svg';
 import PlaySvg from '../../images/play.svg';
 import PauseSvg from '../../images/pause.svg';
 
-class CancellationToken {
-  constructor() {
-    this.isCancellationRequested = false; 
-  }
-
-  cancel() {
-    this.isCancellationRequested = true;
-  }
-}
-
 const Playback = (props) => {
   const [isPreviousDisabled, setIsPreviousDisabled] = useState(true);
   const [isNextDisabled, setIsNextDisabled] = useState(false);
   const [isMainButtonDisabled, setIsMainButtonDisabled] = useState(false);
-  const [cancellationToken, setCancellationToken] = useState(new CancellationToken());
-  const [mainButtonState, setMainButtonState] = useState('play');
+  const [timer, setTimer] = useState(null);
   const [mainButtonSvg, setMainButtonSvg] = useState(PlaySvg);
+
+  const speedRef = useRef(props.speed);
+  speedRef.current = props.speed;
 
   useEffect(() => {
     if (props.historyIndex === 0) {
@@ -44,19 +36,19 @@ const Playback = (props) => {
       setIsMainButtonDisabled(false);
     }
 
-    if (mainButtonState === 'pause') {
+    if (props.isPlaying) {
       setIsPreviousDisabled(true);
       setIsNextDisabled(true);
     }
-  }, [mainButtonState, props.historyIndex, props.history.length]);
+  }, [props.isPlaying, props.historyIndex, props.history.length]);
 
   useEffect(() => {
-    if (mainButtonState === 'play') {
-      setMainButtonSvg(PlaySvg);
-    } else if (mainButtonState === 'pause') {
+    if (props.isPlaying) {
       setMainButtonSvg(PauseSvg);
+    } else {
+      setMainButtonSvg(PlaySvg);
     }
-  }, [mainButtonState]);
+  }, [props.isPlaying]);
 
   const first = () => {
     props.setHistoryIndex(0);
@@ -76,40 +68,32 @@ const Playback = (props) => {
     props.setHistoryIndex(historyIndex - 1);
   }
 
-  const play = async () => {
-    let historyIndex = props.historyIndex;
+  const play = (historyIndex) => {
+    let timeout = 1000 * (1 / speedRef.current);
 
-    props.setHistoryIndex(historyIndex + 1);
     historyIndex += 1;
+    props.setHistoryIndex(historyIndex);
 
-    while (historyIndex < props.history.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      if(cancellationToken.isCancellationRequested) {
-        setCancellationToken(new CancellationToken());
-        return;
-      }
-      
-      props.setHistoryIndex(historyIndex + 1);
-      historyIndex += 1;
+    if (historyIndex < props.history.length - 1) {
+      setTimer(setTimeout(() => { play(historyIndex); }, timeout));
+    } else {
+      props.setIsPlaying(false);
     }
-
-    setMainButtonState('play');
   }
 
-  const pause = async () => {
-    cancellationToken.cancel();
+  const pause = () => {
+    clearTimeout(timer)
   }
 
-  const mainButtonOnClick = async () => {
-    if (mainButtonState === 'play') {
-      setMainButtonState('pause');
-
-      play();
-    } else if (mainButtonState === 'pause') {
-      setMainButtonState('play');
+  const mainButtonOnClick = () => {
+    if (props.isPlaying) {
+      props.setIsPlaying(false);
 
       pause();
+    } else {
+      props.setIsPlaying(true);
+
+      play(props.historyIndex);
     }
   }
 

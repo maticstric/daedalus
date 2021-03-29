@@ -13,9 +13,11 @@ const App = (props) => {
   const [generator, setGenerator] = useState(Generators.RandomizedDepthFirstSearch);
   const [generatorText, setGeneratorText] = useState('randomized depth first search');
   const [size, setSize] = useState(10);
+  const [speed, setSpeed] = useState(1);
   const [canvasSize, setCanvasSize] = useState(546);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [history, setHistory] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const closestMultiple = (n, m) => {
@@ -47,6 +49,10 @@ const App = (props) => {
         history={history}
         setHistoryIndex={setHistoryIndex}
         setSize={setSize}
+        setSpeed={setSpeed}
+        setIsPlaying={setIsPlaying}
+        speed={speed}
+        isPlaying={isPlaying}
       />
       <div id="center">
         <h1>daedalus</h1>
