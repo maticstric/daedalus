@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/daedalus/static/css/main.3953b465.chunk.css",
+    "main.js": "/daedalus/static/js/main.bfbab83b.chunk.js",
+    "main.js.map": "/daedalus/static/js/main.bfbab83b.chunk.js.map",
+    "runtime-main.js": "/daedalus/static/js/runtime-main.34b332d3.js",
+    "runtime-main.js.map": "/daedalus/static/js/runtime-main.34b332d3.js.map",
+    "static/js/2.dccec74c.chunk.js": "/daedalus/static/js/2.dccec74c.chunk.js",
+    "static/js/2.dccec74c.chunk.js.map": "/daedalus/static/js/2.dccec74c.chunk.js.map",
+    "index.html": "/daedalus/index.html",
+    "static/css/main.3953b465.chunk.css.map": "/daedalus/static/css/main.3953b465.chunk.css.map",
+    "static/js/2.dccec74c.chunk.js.LICENSE.txt": "/daedalus/static/js/2.dccec74c.chunk.js.LICENSE.txt",
+    "static/media/app.css": "/daedalus/static/media/Inconsolata-Black.8c8920fe.ttf",
+    "static/media/first.c3e0cf7d.svg": "/daedalus/static/media/first.c3e0cf7d.svg",
+    "static/media/last.f00f4291.svg": "/daedalus/static/media/last.f00f4291.svg",
+    "static/media/next.fe3f3ecb.svg": "/daedalus/static/media/next.fe3f3ecb.svg",
+    "static/media/pause.d4c80d88.svg": "/daedalus/static/media/pause.d4c80d88.svg",
+    "static/media/play.54e558df.svg": "/daedalus/static/media/play.54e558df.svg",
+    "static/media/previous.4ccf2fd0.svg": "/daedalus/static/media/previous.4ccf2fd0.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.34b332d3.js",
+    "static/js/2.dccec74c.chunk.js",
+    "static/css/main.3953b465.chunk.css",
+    "static/js/main.bfbab83b.chunk.js"
+  ]
+}
