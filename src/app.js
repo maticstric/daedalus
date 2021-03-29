@@ -10,7 +10,7 @@ import RandomizedKruskalsAlgorithm from './classes/generators/randomized-kruskal
 import RandomizedPrimsAlgorithm from './classes/generators/randomized-prims-algorithm.js';
 
 const App = (props) => {
-  const [generator, setGenerator] = useState(Generators.RandomizedDepthFirstSearch);
+  const [generator, setGenerator] = useState({current: Generators.RandomizedDepthFirstSearch});
   const [generatorText, setGeneratorText] = useState('randomized depth first search');
   const [size, setSize] = useState(10);
   const [speed, setSpeed] = useState(1);
@@ -30,13 +30,13 @@ const App = (props) => {
     let canvasSize = closestMultiple(550, 2 * size + 1);
     setCanvasSize(canvasSize);
 
-    if (generator === Generators.RandomizedDepthFirstSearch) {
+    if (generator.current === Generators.RandomizedDepthFirstSearch) {
       RandomizedDepthFirstSearch.generate(size, canvasSize, setHistory, setHistoryIndex);
       setGeneratorText('randomized depth first search');
-    } else if (generator === Generators.RandomizedKruskalsAlgorithm) {
+    } else if (generator.current === Generators.RandomizedKruskalsAlgorithm) {
       RandomizedKruskalsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex);
       setGeneratorText('randomized kruskal’s algorithm');
-    } else if (generator === Generators.RandomizedPrimsAlgorithm) {
+    } else if (generator.current === Generators.RandomizedPrimsAlgorithm) {
       RandomizedPrimsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex);
       setGeneratorText('randomized prim’s algorithm');
     }

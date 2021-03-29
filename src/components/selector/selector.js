@@ -6,15 +6,15 @@ import Generators from '../../generators.js';
 const Selector = (props) => {
 
   const setToRandomizedDepthFirstSearch = () => {
-    props.setGenerator(Generators.RandomizedDepthFirstSearch);
+    props.setGenerator({current: Generators.RandomizedDepthFirstSearch});
   }
 
   const setToRandomizedKruskalsAlgorithm = () => {
-    props.setGenerator(Generators.RandomizedKruskalsAlgorithm)
+    props.setGenerator({current: Generators.RandomizedKruskalsAlgorithm});
   }
 
   const setToRandomizedPrimsAlgorithm = () => {
-    props.setGenerator(Generators.RandomizedPrimsAlgorithm);
+    props.setGenerator({current: Generators.RandomizedPrimsAlgorithm});
   }
 
   return (
