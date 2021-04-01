@@ -26,10 +26,14 @@
   transition: 0.15s ease;
 }
 
-#selector-wrapper > button:hover {
+#selector-wrapper > button:hover:enabled {
   transform: scale(1.03);
 }
 
 #selector-wrapper > button:focus {
   outline: 0;
+}
+
+#selector-wrapper > button:disabled {
+  opacity: 0.8;
 }

@@ -20,9 +20,21 @@ const Selector = (props) => {
   return (
     <div id='selector-wrapper'>
       <h2>maze generation algorithms</h2>
-      <button onClick={setToRandomizedDepthFirstSearch}>randomized depth first search</button>
-      <button onClick={setToRandomizedKruskalsAlgorithm}>randomized kruskal’s algorithm</button>
-      <button onClick={setToRandomizedPrimsAlgorithm}>randomized prim’s algorithm</button>
+      <button
+        onClick={setToRandomizedDepthFirstSearch}
+        disabled={props.isPlaying}>
+          randomized depth first search
+      </button>
+      <button
+        onClick={setToRandomizedKruskalsAlgorithm}
+        disabled={props.isPlaying}>
+          randomized kruskal’s algorithm
+      </button>
+      <button
+        onClick={setToRandomizedPrimsAlgorithm}
+        disabled={props.isPlaying}>
+          randomized prim’s algorithm
+      </button>
     </div>
   );
 };

@@ -65,6 +65,7 @@ const App = (props) => {
       </div>
       <Selector
         setGenerator={setGenerator}
+        isPlaying={isPlaying}
       />
     </div>
   );
