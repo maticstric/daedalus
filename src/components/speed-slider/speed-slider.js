@@ -17,7 +17,7 @@ const SpeedSlider = (props) => {
         defaultValue="0"
         onChange={(event) => {
             setSpeedText('speed: ' + event.target.value);
-            props.setSpeed(Math.pow(1000, event.target.value)); 
+            props.setSpeed(Math.pow(1000, event.target.value));
         }}
       />
     </div>

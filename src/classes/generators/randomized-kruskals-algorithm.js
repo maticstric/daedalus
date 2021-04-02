@@ -97,8 +97,8 @@ class RandomizedKruskalsAlgorithm {
   }
 
   static cloneState(board, state) {
-    let newWallList = []; 
-    let newCellSets = []; 
+    let newWallList = [];
+    let newCellSets = [];
 
     state.wallList.forEach((cell) => {
       let newCell = board.cells[cell.index];

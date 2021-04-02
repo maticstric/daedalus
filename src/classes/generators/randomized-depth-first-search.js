@@ -64,7 +64,7 @@ class RandomizedDepthFirstSearch {
   }
 
   static cloneState(board, state) {
-    let newStack = []; 
+    let newStack = [];
 
     state.stack.forEach((cell) => {
       let newCell = board.cells[cell.index];

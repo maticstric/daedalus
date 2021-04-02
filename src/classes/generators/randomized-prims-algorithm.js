@@ -48,7 +48,7 @@ class RandomizedPrimsAlgorithm {
     let wallNeighbors = [];
     let {row, col} = board.getRowAndCol(cell);
     let top, right, bottom, left;
-    
+
     if (row - 1 > 0) {
       top = board.cells[board.index(row - 1, col)];
     }
@@ -80,7 +80,7 @@ class RandomizedPrimsAlgorithm {
   }
 
   static cloneState(board, state) {
-    let newWallList = []; 
+    let newWallList = [];
 
     state.wallList.forEach((cell) => {
       let newCell = board.cells[cell.index];
