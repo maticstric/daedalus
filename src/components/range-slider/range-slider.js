@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './range-slider.css';
 
 const RangeSlider = (props) => {
-  const [sizeText, setSizeText] = useState('size: 10');
-
   return (
     <div id="range-slider-wrapper">
       <div>{props.min}</div>
