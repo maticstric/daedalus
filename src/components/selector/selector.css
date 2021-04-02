@@ -37,3 +37,12 @@
 #selector-wrapper > button:disabled {
   opacity: 0.8;
 }
+
+#selector-wrapper > a {
+  margin-top: auto;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  align-self: flex-end;
+  height: 45px;
+  width: 45px;
+}

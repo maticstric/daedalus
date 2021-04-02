@@ -3,6 +3,8 @@ import './selector.css';
 
 import Generators from '../../generators.js';
 
+import GithubSvg from '../../images/github.svg';
+
 const Selector = (props) => {
 
   const setToRandomizedDepthFirstSearch = () => {
@@ -35,6 +37,11 @@ const Selector = (props) => {
         disabled={props.isPlaying}>
           randomized prim’s algorithm
       </button>
+      <a href="https://github.com/maticstric/daedalus"
+         target="_blank"
+         rel="noreferrer">
+        <img src={GithubSvg} alt="github" />
+      </a>
     </div>
   );
 };
