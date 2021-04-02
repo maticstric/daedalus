@@ -1,3 +1,3 @@
 # daedalus
 
-Collection of maze generation algorithms.
+Source code for daedalus: a collection of maze generation algorithms.
