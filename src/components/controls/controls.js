@@ -17,12 +17,11 @@ const Controls = (props) => {
         setSpeed={props.setSpeed}
       />
       <Playback
-        historyIndex={props.historyIndex}
         history={props.history}
-        setHistoryIndex={props.setHistoryIndex}
         speed={props.speed}
-        isPlaying={props.isPlaying}
-        setIsPlaying={props.setIsPlaying}
+        historyIndex={props.historyIndex} setHistoryIndex={props.setHistoryIndex}
+        isPlaying={props.isPlaying} setIsPlaying={props.setIsPlaying}
+        cells={props.cells} setCells={props.setCells}
       />
       <div></div>
       <blockquote>

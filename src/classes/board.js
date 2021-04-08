@@ -28,8 +28,8 @@ class Board {
     return cells;
   }
 
-  neumannNeighborhood = (cell) => {
-    let neighbors = [];
+  secondNeumannNeighborhood = (cell) => {
+    let secondNeumannNeighbors = [];
     let {row, col} = this.getRowAndCol(cell);
 
     let top = this.cells[this.index(row - 2, col)];
@@ -37,12 +37,73 @@ class Board {
     let bottom = this.cells[this.index(row + 2, col)];
     let left = this.cells[this.index(row, col - 2)];
 
+    if (top) { secondNeumannNeighbors.push(top); }
+    if (right) { secondNeumannNeighbors.push(right); }
+    if (bottom) { secondNeumannNeighbors.push(bottom); }
+    if (left) { secondNeumannNeighbors.push(left); }
+
+    return secondNeumannNeighbors;
+  }
+
+  wallSecondNeumannNeighbors = (cell) => {
+    let secondNeumannNeighbors = this.secondNeumannNeighborhood(cell);
+    let wallSecondNeumannNeighbors = [];
+
+    for (let i = 0; i < secondNeumannNeighbors.length; i++) {
+      let c = secondNeumannNeighbors[i];
+
+      if(c.isWall) {
+        wallSecondNeumannNeighbors.push(c);
+      }
+    }
+
+    return wallSecondNeumannNeighbors;
+  }
+
+  neumannNeighborhood = (cell) => {
+    let neighbors = [];
+    let {row, col} = this.getRowAndCol(cell);
+    let top, right, bottom, left;
+
+    // The first and last rows/cols are just the edge of the board so we must ignore them
+
+    if (row - 1 > 0) {
+      top = this.cells[this.index(row - 1, col)];
+    }
+
+    if (col + 1 < this.cols - 1) {
+      right = this.cells[this.index(row, col + 1)];
+    }
+
+    if (row + 1 < this.rows - 1) {
+      bottom = this.cells[this.index(row + 1, col)];
+    }
+
+    if (col - 1 > 0) {
+      left = this.cells[this.index(row, col - 1)];
+    }
+
     if (top) { neighbors.push(top); }
     if (right) { neighbors.push(right); }
     if (bottom) { neighbors.push(bottom); }
     if (left) { neighbors.push(left); }
 
     return neighbors;
+  }
+
+  wallNeumannNeighborhood = (cell) => {
+    let neighbors = this.neumannNeighborhood(cell);
+    let wallNeumannNeighbors = [];
+
+    for (let i = 0; i < neighbors.length; i++) {
+      let c = neighbors[i];
+
+      if(c.isWall) {
+        wallNeumannNeighbors.push(c);
+      }
+    }
+
+    return wallNeumannNeighbors;
   }
 
   cellBetween = (cellA, cellB) => {
@@ -74,7 +135,7 @@ class Board {
   }
 
 
-  index = (row, col) => { // Convert from 2d array coordinates to 1d
+  index(row, col) { // Convert from 2d array coordinates to 1d
     if (row < 0 || col < 0 || row > this.rows - 1 || col > this.cols - 1) {
       return -1; // Invalid index
     }
@@ -82,25 +143,11 @@ class Board {
     return col + row * this.cols;
   }
 
-  getRowAndCol(cell) {
+  getRowAndCol(cell) { // Convert from 1d array coordinates to 2d
     let row = Math.floor(cell.index / this.cols);
     let col = cell.index % this.cols;
 
     return {row: row, col: col};
-  }
-
-  clone = () => {
-    let boardCopy = new Board(this.width, this.height, this.rows, this.cols);
-
-    boardCopy.cells = [];
-
-    this.cells.forEach((cell) => {
-      let cellCopy = cell.clone();
-      boardCopy.cells.push(cellCopy);
-    });
-
-
-    return boardCopy;
   }
 }
 

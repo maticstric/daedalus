@@ -13,9 +13,9 @@ const Canvas = (props) => {
     ctx.canvas.width = props.canvasSize;
     ctx.canvas.height = props.canvasSize;
 
-    const showBoard = (board, ctx) => {
-      if (board) {
-        board.cells.forEach(cell => {
+    const displayCells = (cells, ctx) => {
+      if (cells) {
+        cells.forEach(cell => {
           if (cell.isWall) {
             ctx.fillStyle = Colors.black;
           } else {
@@ -31,10 +31,8 @@ const Canvas = (props) => {
       }
     }
 
-    let board = props.history[props.historyIndex];
-
-    showBoard(board, ctx);
-  }, [props.historyIndex, props.history, props.canvasSize]);
+    displayCells(props.cells, ctx);
+  }, [props.cells, props.canvasSize]);
 
   return (
     <div id="canvas-wrapper">

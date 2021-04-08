@@ -11,6 +11,17 @@ class Cell {
   clone() {
     return new Cell(this.x, this.y, this.index, this.width, this.height, this.isWall);
   }
+
+  static cloneCellArray(cells) {
+    let newCells = [];
+
+    cells.forEach((cell) => {
+      let cellCopy = cell.clone();
+      newCells.push(cellCopy);
+    });
+
+    return newCells;
+  }
 }
 
 export default Cell;

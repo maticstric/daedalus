@@ -1,78 +1,69 @@
 import Board from '../board.js';
+import Cell from '../cell.js';
 
 class RandomizedDepthFirstSearch {
-  static generate = (size, canvasSize, setHistory, setHistoryIndex) => {
-    let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
-    let newGeneratorState = this.getInitialState();
-    let newStack = newGeneratorState.stack;
-    let newHistory = [newBoard.clone()];
+  static generate = (size, canvasSize, setHistory, setHistoryIndex, setCells) => {
+    let board = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
+    let generatorState = this.getInitialState();
+    let stack = generatorState.stack;
+    let history = [{
+      prev: Cell.cloneCellArray(board.cells), // 'prev' in first entry takes you to initial state
+      next: null
+    }];
 
-    if (newStack.length === 0) {
-      let startingCell = newBoard.cells[newBoard.cols + 1]
-      newBoard.cells[startingCell.index].isWall = false;
+    let startingCell = board.cells[board.cols + 1]
+    board.cells[startingCell.index].isWall = false;
 
-      newStack.push(startingCell);
-    }
+    stack.push(startingCell);
 
-    while (newStack.length !== 0) {
-      let currentCell = newStack.pop();
+    while (stack.length !== 0) {
+      let currentCell = stack.pop();
 
-      let wallNeighbors = this.wallNeighbors(newBoard, currentCell);
+      let wallNeighbors = board.wallSecondNeumannNeighbors(currentCell);
 
       if (wallNeighbors.length !== 0) {
-        newStack.push(currentCell);
+        stack.push(currentCell);
 
         let randomIndex = Math.floor(Math.random() * wallNeighbors.length);
         let randomNeighbor = wallNeighbors[randomIndex];
 
-        let cellBetween = newBoard.cellBetween(currentCell, randomNeighbor);
-        newBoard.cells[cellBetween.index].isWall = false;
+        let cellBetween = board.cellBetween(currentCell, randomNeighbor);
+        board.cells[cellBetween.index].isWall = false;
 
-        newBoard.cells[randomNeighbor.index].isWall = false;
-        newStack.push(randomNeighbor);
+        board.cells[randomNeighbor.index].isWall = false;
+        stack.push(randomNeighbor);
 
-        newHistory.push(newBoard);
+        history[history.length - 1].next = {
+          [cellBetween.index]: false,
+          [randomNeighbor.index]: false
+        };
 
-        newBoard = newBoard.clone();
-        newGeneratorState = this.cloneState(newBoard, newGeneratorState);
-        newStack = newGeneratorState.stack;
+        history.push({
+          prev: {
+            [cellBetween.index]: true,
+            [randomNeighbor.index]: true
+          },
+          next: null
+        });
       }
     }
 
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-  }
+    // 'next' in last entry takes you to final state
+    history[history.length - 1].next = Cell.cloneCellArray(board.cells);
 
-  static wallNeighbors = (board, cell) => {
-    let neighbors = board.neumannNeighborhood(cell);
-    let wallNeighbors = [];
+    // 'startingCell' is a special case so we just add it here
+    history[0].next[startingCell.index] = false;
+    history[1].prev[startingCell.index] = true;
 
-    for (let i = 0; i < neighbors.length; i++) {
-      let c = neighbors[i];
-      if(c.isWall) {
-        wallNeighbors.push(c);
-      }
-    }
-
-    return wallNeighbors;
+    setHistory(history);
+    setHistoryIndex(history.length - 1);
+    setCells(Cell.cloneCellArray(board.cells));
   }
 
   static getInitialState() {
     return {
       stack: []
     }
-  }
-
-  static cloneState(board, state) {
-    let newStack = [];
-
-    state.stack.forEach((cell) => {
-      let newCell = board.cells[cell.index];
-
-      newStack.push(newCell);
-    });
-
-    return { stack: newStack };
   }
 }
 

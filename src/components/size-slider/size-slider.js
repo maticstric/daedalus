@@ -12,7 +12,7 @@ const SizeSlider = (props) => {
         disabled={props.isPlaying}
         type="range"
         min="2"
-        max="30"
+        max="50"
         step="1"
         defaultValue="10"
         onChange={(event) => { setSizeText('size: ' + event.target.value); }}

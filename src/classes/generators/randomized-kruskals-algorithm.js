@@ -1,56 +1,72 @@
 import Board from '../board.js';
+import Cell from '../cell.js';
+import DisjointSet from '../disjoint-set.js';
 
 class RandomizedKruskalsAlgorithm {
-  static generate = (size, canvasSize, setHistory, setHistoryIndex) => {
-    let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
-    let newGeneratorState = this.getInitialState(newBoard);
-    let newWallList = newGeneratorState.wallList;
-    let newCellSets = newGeneratorState.cellSets;
-    let newHistory = [newBoard.clone()];
+  static generate = (size, canvasSize, setHistory, setHistoryIndex, setCells) => {
+    let board = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
+    let generatorState = this.getInitialState(board);
+    let wallList = generatorState.wallList;
+    let cellSets = generatorState.cellSets;
+    let history = [{
+      prev: Cell.cloneCellArray(board.cells), // 'prev' in first entry takes you to initial state
+      next: null
+    }];
 
-    while (newCellSets.length > 1) {
-      let randomWallIndex = Math.floor(Math.random() * newWallList.length);
-      let randomWall = newWallList[randomWallIndex];
+    while (cellSets.numSets > 1) {
+      let randomWallIndex = Math.floor(Math.random() * wallList.length);
+      let randomWall = wallList[randomWallIndex];
 
-      let {cellA, cellB} = newBoard.getCellsDividedByWall(randomWall);
-      let setOfCellA = this.getSetWithCell(newCellSets, cellA);
-      let setOfCellB = this.getSetWithCell(newCellSets, cellB);
+      let {cellA, cellB} = board.getCellsDividedByWall(randomWall);
 
-      if (setOfCellA !== setOfCellB) {
-        newBoard.cells[cellA.index].isWall = false;
-        newBoard.cells[cellB.index].isWall = false;
-        newBoard.cells[randomWall.index].isWall = false;
+      if (cellSets.findSet(cellA.index) !== cellSets.findSet(cellB.index)) {
+        let nextHistory = {};
+        let prevHistory = {};
 
-        newWallList.splice(randomWallIndex, 1);
+        if (board.cells[cellA.index].isWall) {
+          board.cells[cellA.index].isWall = false;
+          nextHistory[cellA.index] = false;
+          prevHistory[cellA.index] = true;
+        }
 
-        newCellSets.splice(newCellSets.indexOf(setOfCellA), 1);
-        newCellSets.splice(newCellSets.indexOf(setOfCellB), 1);
-        newCellSets.push(new Set([...setOfCellA, ...setOfCellB]));
+        if (board.cells[cellB.index].isWall) {
+          board.cells[cellB.index].isWall = false;
+          nextHistory[cellB.index] = false;
+          prevHistory[cellB.index] = true;
+        }
 
-        newHistory.push(newBoard);
+        if (board.cells[randomWall.index].isWall) {
+          board.cells[randomWall.index].isWall = false;
+          nextHistory[randomWall.index] = false;
+          prevHistory[randomWall.index] = true;
+        }
 
-        newBoard = newBoard.clone();
-        newGeneratorState = this.cloneState(newBoard, newGeneratorState);
-        newWallList = newGeneratorState.wallList;
-        newCellSets = newGeneratorState.cellSets;
+        wallList.splice(randomWallIndex, 1);
+
+        cellSets.union(cellA.index, cellB.index);
+
+        history[history.length - 1].next = nextHistory;
+
+        history.push({
+          prev: prevHistory,
+          next: null
+        });
       }
     }
 
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
+    // 'next' in last entry takes you to final state
+    history[history.length - 1].next = Cell.cloneCellArray(board.cells);
+
+    setHistory(history);
+    setHistoryIndex(history.length - 1);
+    setCells(Cell.cloneCellArray(board.cells));
   }
 
-  static getSetWithCell(sets, cell) {
-    let set;
-    sets.forEach((s) => {
-      s.forEach((c) => {
-        if (c === cell) {
-          set = s;
-        }
-      });
-    });
-
-    return set;
+  static getInitialState(board) {
+    return {
+      wallList: this.getInitialWallList(board),
+      cellSets: this.getInitialCellSets(board)
+    }
   }
 
   static getInitialWallList(board) {
@@ -74,53 +90,17 @@ class RandomizedKruskalsAlgorithm {
   }
 
   static getInitialCellSets(board) {
-    let cellSets = [];
+    let cellIndices = [];
 
     board.cells.forEach((cell) => {
       let {row, col} = board.getRowAndCol(cell);
 
       if (row % 2 === 1 && col % 2 === 1)  {
-        let cellSet = new Set();
-        cellSet.add(cell);
-        cellSets.push(cellSet);
+        cellIndices.push(cell.index);
       }
     });
 
-    return cellSets;
-  }
-
-  static getInitialState(board) {
-    return {
-      wallList: this.getInitialWallList(board),
-      cellSets: this.getInitialCellSets(board)
-    }
-  }
-
-  static cloneState(board, state) {
-    let newWallList = [];
-    let newCellSets = [];
-
-    state.wallList.forEach((cell) => {
-      let newCell = board.cells[cell.index];
-
-      newWallList.push(newCell);
-    });
-
-    state.cellSets.forEach((set) => {
-      let newSet = new Set();
-
-      set.forEach((cell) => {
-        let newCell = board.cells[cell.index];
-        newSet.add(newCell);
-      });
-
-      newCellSets.push(newSet);
-    });
-
-    return {
-      wallList: newWallList,
-      cellSets: newCellSets
-    }
+    return new DisjointSet(cellIndices);
   }
 }
 

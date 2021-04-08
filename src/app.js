@@ -12,6 +12,7 @@ import RandomizedPrimsAlgorithm from './classes/generators/randomized-prims-algo
 const App = (props) => {
   const [generator, setGenerator] = useState({current: Generators.RandomizedDepthFirstSearch});
   const [generatorText, setGeneratorText] = useState('randomized depth first search');
+  const [cells, setCells] = useState(null);
   const [size, setSize] = useState(10);
   const [speed, setSpeed] = useState(1);
   const [canvasSize, setCanvasSize] = useState(546);
@@ -31,13 +32,13 @@ const App = (props) => {
     setCanvasSize(canvasSize);
 
     if (generator.current === Generators.RandomizedDepthFirstSearch) {
-      RandomizedDepthFirstSearch.generate(size, canvasSize, setHistory, setHistoryIndex);
+      RandomizedDepthFirstSearch.generate(size, canvasSize, setHistory, setHistoryIndex, setCells);
       setGeneratorText('randomized depth first search');
     } else if (generator.current === Generators.RandomizedKruskalsAlgorithm) {
-      RandomizedKruskalsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex);
+      RandomizedKruskalsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex, setCells);
       setGeneratorText('randomized kruskal’s algorithm');
     } else if (generator.current === Generators.RandomizedPrimsAlgorithm) {
-      RandomizedPrimsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex);
+      RandomizedPrimsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex, setCells);
       setGeneratorText('randomized prim’s algorithm');
     }
   }, [generator, size]);
@@ -45,21 +46,18 @@ const App = (props) => {
   return (
     <div id="app">
       <Controls
-        historyIndex={historyIndex}
         history={history}
-        setHistoryIndex={setHistoryIndex}
         setSize={setSize}
-        setSpeed={setSpeed}
-        setIsPlaying={setIsPlaying}
-        speed={speed}
-        isPlaying={isPlaying}
+        historyIndex={historyIndex} setHistoryIndex={setHistoryIndex}
+        speed={speed} setSpeed={setSpeed}
+        isPlaying={isPlaying} setIsPlaying={setIsPlaying}
+        cells={cells} setCells={setCells}
       />
       <div id="center">
         <h1>daedalus</h1>
         <h2>{generatorText}</h2>
         <Canvas
-          history={history}
-          historyIndex={historyIndex}
+          cells={cells}
           canvasSize={canvasSize}
         />
       </div>

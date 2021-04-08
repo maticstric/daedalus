@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Cell from '../../classes/cell.js';
 import './playback.css';
 
 import FirstSvg from '../../images/first.svg';
@@ -51,31 +52,66 @@ const Playback = (props) => {
   }, [props.isPlaying]);
 
   const first = () => {
+    let firstCells = props.history[0].prev;
+
     props.setHistoryIndex(0);
+    props.setCells(Cell.cloneCellArray(firstCells));
   }
 
   const last = () => {
+    let lastCells = props.history[props.history.length - 1].next;
+
     props.setHistoryIndex(props.history.length - 1);
+    props.setCells(Cell.cloneCellArray(lastCells));
   }
 
   const next = () => {
     let historyIndex = props.historyIndex;
     props.setHistoryIndex(historyIndex + 1);
+
+    let historyEntry = props.history[props.historyIndex].next;
+    handleHistoryEntry(historyEntry);
   }
 
   const previous = () => {
     let historyIndex = props.historyIndex;
     props.setHistoryIndex(historyIndex - 1);
+
+    let historyEntry = props.history[props.historyIndex].prev;
+    handleHistoryEntry(historyEntry);
   }
 
-  const play = (historyIndex) => {
+  const handleHistoryEntry = (historyEntry) => {
+    let keys = Object.keys(historyEntry);
+    let values = Object.values(historyEntry);
+    let newCells = Cell.cloneCellArray(props.cells);
+
+    keys.forEach((key, i) => {
+      newCells[key].isWall = values[i];
+    });
+
+    props.setCells(newCells);
+  }
+
+  const play = (historyIndex, cells) => {
     let timeout = 1000 * (1 / speedRef.current);
 
+    let historyEntry = props.history[historyIndex].next;
+    let keys = Object.keys(historyEntry);
+    let values = Object.values(historyEntry);
+    let newCells = Cell.cloneCellArray(cells);
+
+    keys.forEach((key, i) => {
+      newCells[key].isWall = values[i];
+    });
+
     historyIndex += 1;
+
     props.setHistoryIndex(historyIndex);
+    props.setCells(newCells);
 
     if (historyIndex < props.history.length - 1) {
-      setTimer(setTimeout(() => { play(historyIndex); }, timeout));
+      setTimer(setTimeout(() => { play(historyIndex, newCells); }, timeout));
     } else {
       props.setIsPlaying(false);
     }
@@ -93,7 +129,7 @@ const Playback = (props) => {
     } else {
       props.setIsPlaying(true);
 
-      play(props.historyIndex);
+      play(props.historyIndex, props.cells);
     }
   }
 

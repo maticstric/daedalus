@@ -1,25 +1,27 @@
 import Board from '../board.js';
+import Cell from '../cell.js';
 
 class RandomizedPrimsAlgorithm {
-  static generate = (size, canvasSize, setHistory, setHistoryIndex) => {
-    let newBoard = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
-    let newGeneratorState = this.getInitialState();
-    let newWallList = newGeneratorState.wallList;
-    let newHistory = [newBoard.clone()];
+  static generate = (size, canvasSize, setHistory, setHistoryIndex, setCells) => {
+    let board = new Board(canvasSize, canvasSize, (size * 2) + 1, (size * 2) + 1);
+    let generatorState = this.getInitialState();
+    let wallList = generatorState.wallList;
+    let history = [{
+      prev: Cell.cloneCellArray(board.cells), // 'prev' in first entry takes you to initial state
+      next: null
+    }];
 
-    if (newWallList.length === 0) {
-      let startingCell = newBoard.cells[newBoard.cols + 1]
-      newBoard.cells[startingCell.index].isWall = false;
+    let startingCell = board.cells[board.cols + 1]
+    board.cells[startingCell.index].isWall = false;
 
-      let wallNeumannNeighborhood = this.wallNeumannNeighborhood(newBoard, startingCell);
-      newWallList.push(...wallNeumannNeighborhood);
-    }
+    let wallNeumannNeighborhood = board.wallNeumannNeighborhood(startingCell);
+    wallList = wallList.concat(wallNeumannNeighborhood);
 
-    while (newWallList.length > 0) {
-      let randomIndex = Math.floor(Math.random() * newWallList.length);
-      let randomWall = newWallList[randomIndex];
+    while (wallList.length > 0) {
+      let randomIndex = Math.floor(Math.random() * wallList.length);
+      let randomWall = wallList[randomIndex];
 
-      let {cellA, cellB} = newBoard.getCellsDividedByWall(randomWall);
+      let {cellA, cellB} = board.getCellsDividedByWall(randomWall);
 
       if ((!cellA.isWall && cellB.isWall) || (cellA.isWall && !cellB.isWall)) { // XOR
         let cellWhichIsWall = cellA.isWall ? cellA : cellB;
@@ -27,68 +29,42 @@ class RandomizedPrimsAlgorithm {
         randomWall.isWall = false;
         cellWhichIsWall.isWall = false;
 
-        let wallNeumannNeighborhood = this.wallNeumannNeighborhood(newBoard, cellWhichIsWall);
-        newWallList.push(...wallNeumannNeighborhood);
+        let wallNeumannNeighborhood = board.wallNeumannNeighborhood(cellWhichIsWall);
+        wallList = wallList.concat(wallNeumannNeighborhood);
 
-        newHistory.push(newBoard);
+        history[history.length - 1].next = {
+          [randomWall.index]: false,
+          [cellWhichIsWall.index]: false
+        };
 
-        newBoard = newBoard.clone();
-        newGeneratorState = this.cloneState(newBoard, newGeneratorState);
-        newWallList = newGeneratorState.wallList;
+        history.push({
+          prev: {
+            [randomWall.index]: true,
+            [cellWhichIsWall.index]: true
+          },
+          next: null
+        });
       }
 
-      newWallList.splice(randomIndex, 1);
+      wallList.splice(randomIndex, 1);
     }
 
-    setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-  }
+    // 'next' in last entry takes you to final state
+    history[history.length - 1].next = Cell.cloneCellArray(board.cells);
 
-  static wallNeumannNeighborhood(board, cell) {
-    let wallNeighbors = [];
-    let {row, col} = board.getRowAndCol(cell);
-    let top, right, bottom, left;
+    // 'startingCell' is a special case so we just add it here
+    history[0].next[startingCell.index] = false;
+    history[1].prev[startingCell.index] = true;
 
-    if (row - 1 > 0) {
-      top = board.cells[board.index(row - 1, col)];
-    }
-
-    if (col + 1 < board.cols - 1) {
-      right = board.cells[board.index(row, col + 1)];
-    }
-
-    if (row + 1 < board.rows - 1) {
-      bottom = board.cells[board.index(row + 1, col)];
-    }
-
-    if (col - 1 > 0) {
-      left = board.cells[board.index(row, col - 1)];
-    }
-
-    if (top && top.isWall) { wallNeighbors.push(top); }
-    if (right && right.isWall) { wallNeighbors.push(right); }
-    if (bottom && bottom.isWall) { wallNeighbors.push(bottom); }
-    if (left && left.isWall) { wallNeighbors.push(left); }
-
-    return wallNeighbors;
+    setHistory(history);
+    setHistoryIndex(history.length - 1);
+    setCells(Cell.cloneCellArray(board.cells));
   }
 
   static getInitialState() {
     return {
       wallList: []
     }
-  }
-
-  static cloneState(board, state) {
-    let newWallList = [];
-
-    state.wallList.forEach((cell) => {
-      let newCell = board.cells[cell.index];
-
-      newWallList.push(newCell);
-    });
-
-    return { wallList: newWallList };
   }
 }
 
