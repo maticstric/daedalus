@@ -16,7 +16,7 @@ class RandomizedDepthFirstSearch {
 
     stack.push(startingCell);
 
-    while (stack.length !== 0) {
+    while (stack.length > 0) {
       let currentCell = stack.pop();
 
       let wallNeighbors = board.wallSecondNeumannNeighbors(currentCell);
