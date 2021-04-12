@@ -8,6 +8,7 @@ import Generators from './generators.js';
 import RandomizedDepthFirstSearch from './classes/generators/randomized-depth-first-search.js';
 import RandomizedKruskalsAlgorithm from './classes/generators/randomized-kruskals-algorithm.js';
 import RandomizedPrimsAlgorithm from './classes/generators/randomized-prims-algorithm.js';
+import WilsonsAlgorithm from './classes/generators/wilsons-algorithm.js';
 
 const App = (props) => {
   const [generator, setGenerator] = useState({current: Generators.RandomizedDepthFirstSearch});
@@ -40,6 +41,9 @@ const App = (props) => {
     } else if (generator.current === Generators.RandomizedPrimsAlgorithm) {
       RandomizedPrimsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex, setCells);
       setGeneratorText('randomized prim’s algorithm');
+    } else if (generator.current === Generators.WilsonsAlgorithm) {
+      WilsonsAlgorithm.generate(size, canvasSize, setHistory, setHistoryIndex, setCells);
+      setGeneratorText('wilson’s algorithm');
     }
   }, [generator, size]);
 

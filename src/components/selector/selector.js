@@ -19,6 +19,10 @@ const Selector = (props) => {
     props.setGenerator({current: Generators.RandomizedPrimsAlgorithm});
   }
 
+  const setToWilsonsAlgorithm = () => {
+    props.setGenerator({current: Generators.WilsonsAlgorithm});
+  }
+
   return (
     <div id='selector-wrapper'>
       <h2>maze generation algorithms</h2>
@@ -36,6 +40,11 @@ const Selector = (props) => {
         onClick={setToRandomizedPrimsAlgorithm}
         disabled={props.isPlaying}>
           randomized prim’s algorithm
+      </button>
+      <button
+        onClick={setToWilsonsAlgorithm}
+        disabled={props.isPlaying}>
+          wilson’s algorithm
       </button>
       <a href="https://github.com/maticstric/daedalus"
          target="_blank"
